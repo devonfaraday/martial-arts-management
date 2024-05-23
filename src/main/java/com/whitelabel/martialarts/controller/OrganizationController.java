@@ -62,7 +62,7 @@ public class OrganizationController {
     @GetMapping("/signup")
     public String signupForm(Model model) {
         model.addAttribute("registrationForm", new RegistrationForm());
-        return "organization/signup";
+        return "/signup";
     }
 
     @PostMapping("/signup")
