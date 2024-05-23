@@ -5,7 +5,7 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<header th:insert="layout/header :: header"></header>
+<header th:insert="~{layout/header :: header}"></header>
 <h1>Staff Members</h1>
 <form th:action="@{/staff/search}" method="get">
     <input type="text" name="keyword" placeholder="Search..."/>

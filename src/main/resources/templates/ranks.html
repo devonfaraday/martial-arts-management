@@ -6,7 +6,7 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<header th:insert="layout/header :: header"></header>
+<header th:insert="~{layout/header :: header}"></header>
 <main>
     <h2>Manage Ranks</h2>
     <div id="rank-list" th:fragment="rankList">
