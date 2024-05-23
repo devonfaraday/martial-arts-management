@@ -1,32 +1,37 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Martial Arts Management</title>
-    <script src="https://unpkg.com/htmx.org@1.5.0"></script>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-</head>
-<body>
-<header th:fragment="header">
-    <div class="header-container">
-        <div class="logo">
-            <img th:src="@{/images/CashIn-Icon.png}" alt="Martial Arts Management Logo">
-        </div>
-        <h1>Martial Arts Management</h1>
-        <nav>
-            <a href="/" hx-get="/">Home</a>
-            <a href="/school" hx-get="/school">School</a>
-            <a href="/locations" hx-get="/locations">Locations</a>
-            <a href="/students" hx-get="/students">Students</a>
-            <a href="/staff" hx-get="/staff">Staff</a>
-            <a href="/classes" hx-get="/classes">Classes</a>
-            <a href="/events" hx-get="/events">Events</a>
-            <a href="/announcements" hx-get="/announcements">Announcements</a>
-            <a href="/login" hx-get="/login">Login</a>
-        </nav>
-    </div>
-</header>
-<main th:replace="content">
-    <!-- This will be replaced by fragments in other templates -->
-</main>
-</body>
+
+    <head>
+        <title>Martial Arts Management</title>
+        <script src="https://unpkg.com/htmx.org@1.5.0"></script>
+        <link rel="stylesheet" th:href="@{/css/styles.css}">
+    </head>
+
+    <body>
+        <header th:fragment="header">
+            <div class="header-container">
+                <div class="logo">
+                    <img th:src="@{/images/CashIn-Icon.png}" alt="Martial Arts Management Logo">
+                </div>
+                <h1>Martial Arts Management</h1>
+                <nav>
+                    <a href="/" hx-get="/">Home</a>
+                    <a href="/locations" hx-get="/locations">Locations</a>
+                    <div th:if="${#authorization.expression('isAuthenticated')}">
+                        <a href="/school" hx-get="/school">School</a>
+                        <a href="/students" hx-get="/students">Students</a>
+                        <a href="/staff" hx-get="/staff">Staff</a>
+                        <a href="/classes" hx-get="/classes">Classes</a>
+                        <a href="/events" hx-get="/events">Events</a>
+                        <a href="/announcements" hx-get="/announcements">Announcements</a>
+                        <a href="/login" hx-get="/login">Login</a>
+                    </div>
+                </nav>
+            </div>
+        </header>
+        <main th:replace="content">
+            <!-- This will be replaced by fragments in other templates -->
+        </main>
+    </body>
+
 </html>
