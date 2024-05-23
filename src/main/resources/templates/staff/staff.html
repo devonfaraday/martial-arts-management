@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Staff Management</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header th:insert="layout/header :: header"></header>
+<h1>Staff Members</h1>
+<form th:action="@{/staff/search}" method="get">
+    <input type="text" name="keyword" placeholder="Search..."/>
+    <button type="submit">Search</button>
+</form>
+<a th:href="@{/staff/add}">Add Staff Member</a>
+<ul>
+    <li th:each="staff : ${staff}">
+        <span th:text="${staff.firstName} + ' ' + ${staff.lastName}">Staff Name</span> -
+        <span th:text="${staff.email}">Staff Email</span> -
+        <span th:text="${staff.role}">Staff Role</span>
+        <a th:href="@{/staff/edit/{id}(id=${staff.id})}">Edit</a>
+        <a th:href="@{/staff/delete/{id}(id=${staff.id})}">Delete</a>
+    </li>
+</ul>
+</body>
+</html>

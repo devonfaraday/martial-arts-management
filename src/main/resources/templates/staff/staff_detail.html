@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Staff Detail</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<header th:replace="~{layout/header :: header}"></header>
+<body>
+<h1>Staff Detail</h1>
+<p>Name: <span th:text="${staff.firstName} + ' ' + ${staff.lastName}"></span></p>
+<p>Email: <span th:text="${staff.email}"></span></p>
+<p>Role: <span th:text="${staff.role}"></span></p>
+<a th:href="@{/templates/staff}">Back to List</a>
+</body>
+</html>

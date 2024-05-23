@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Organization</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<header th:insert="~{layout :: header}"></header>
+<body>
+<main>
+    <h2>Organization Details</h2>
+    <div>
+        <p><strong>Name:</strong> <span th:text="${organization.name}"></span></p>
+        <p><strong>Address:</strong> <span th:text="${organization.address}"></span></p>
+        <p><strong>Address Two:</strong> <span th:text="${organization.addressTwo}"></span></p>
+        <p><strong>City:</strong> <span th:text="${organization.city}"></span></p>
+        <p><strong>State:</strong> <span th:text="${organization.state}"></span></p>
+        <p><strong>ZIP Code:</strong> <span th:text="${organization.zip}"></span></p>
+        <p><strong>Phone:</strong> <span th:text="${organization.phone}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${organization.email}"></span></p>
+    </div>
+    <div>
+        <a th:href="@{/organization/edit/{id}(id=${organization.id})}">Edit</a>
+        <form th:action="@{/organization/delete/{id}(id=${organization.id})}" method="post">
+            <input type="hidden" name="_method" value="delete"/>
+            <button type="submit">Delete</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>

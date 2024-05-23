@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Staff Member</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<header th:replace="~{layout/header :: header}"></header>
+<body>
+<h1>Add Staff Member</h1>
+<form th:action="@{/templates/staff}" th:object="${staff}" method="post">
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" th:field="*{firstName}" required/>
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" th:field="*{lastName}" required/>
+    <label for="email">Email:</label>
+    <input type="email" id="email" th:field="*{email}" required/>
+    <label for="role">Role:</label>
+    <input type="text" id="role" th:field="*{role}" required/>
+    <button type="submit">Add</button>
+</form>
+<a th:href="@{/templates/staff}">Back to List</a>
+</body>
+</html>

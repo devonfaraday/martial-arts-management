@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Student</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header th:insert="~{layout/header :: header}"></header>
+<main>
+    <h1>Edit Student</h1>
+    <form th:action="@{/students/edit/{id}(id=${student.id})}" th:object="${student}" method="post">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" th:field="*{firstName}" required/>
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" th:field="*{lastName}" required/>
+        <label for="email">Email:</label>
+        <input type="email" id="email" th:field="*{email}" required/>
+        <label for="phoneNumber">Phone:</label>
+        <input type="text" id="phoneNumber" th:field="*{phoneNumber}" required/>
+        <button type="submit">Save</button>
+    </form>
+    <a th:href="@{/students}">Back to List</a>
+</main>
+</body>
+</html>

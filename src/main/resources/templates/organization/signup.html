@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sign Up</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<header th:insert="~{layout :: header}"></header>
+<body>
+<main>
+    <h1>Sign Up</h1>
+    <form th:action="@{/organization/signup}" th:object="${registrationForm}" method="post">
+        <div>
+            <label for="name">Organization Name</label>
+            <input type="text" id="name" th:field="*{organization.name}" required />
+        </div>
+        <div>
+            <label for="address">Address</label>
+            <input type="text" id="address" th:field="*{organization.address}" required />
+        </div>
+        <div>
+            <label for="addressTwo">Address Two</label>
+            <input type="text" id="addressTwo" th:field="*{organization.addressTwo}" />
+        </div>
+        <div>
+            <label for="city">City</label>
+            <input type="text" id="city" th:field="*{organization.city}" required />
+        </div>
+        <div>
+            <label for="state">State</label>
+            <input type="text" id="state" th:field="*{organization.state}" required />
+        </div>
+        <div>
+            <label for="zip">ZIP Code</label>
+            <input type="text" id="zip" th:field="*{organization.zip}" required />
+        </div>
+        <div>
+            <label for="phone">Phone</label>
+            <input type="text" id="phone" th:field="*{organization.phone}" required />
+        </div>
+        <div>
+            <label for="orgEmail">Organization Email</label>
+            <input type="email" id="orgEmail" th:field="*{organization.email}" required />
+        </div>
+        <h2>Admin User Details</h2>
+        <div>
+            <label for="username">Username</label>
+            <input type="text" id="username" th:field="*{appUser.username}" required />
+        </div>
+        <div>
+            <label for="password">Password</label>
+            <input type="password" id="password" th:field="*{appUser.password}" required />
+        </div>
+        <div>
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" th:field="*{appUser.firstName}" required />
+        </div>
+        <div>
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" th:field="*{appUser.lastName}" required />
+        </div>
+        <div>
+            <label for="userEmail">Admin Email</label>
+            <input type="email" id="userEmail" th:field="*{appUser.email}" required />
+        </div>
+        <div>
+            <button type="submit">Sign Up</button>
+        </div>
+    </form>
+</main>
+</body>
+</html>

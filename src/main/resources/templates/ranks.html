@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Manage Ranks</title>
+    <script src="https://unpkg.com/htmx.org@1.5.0/dist/htmx.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header th:insert="layout/header :: header"></header>
+<main>
+    <h2>Manage Ranks</h2>
+    <div id="rank-list" th:fragment="rankList">
+        <ul>
+            <li th:each="rank : ${ranks}">
+                <span th:text="${rank.name}">Rank Name</span>
+                <ul>
+                    <li th:each="subRank : ${rank.subRanks}">
+                        <span th:text="${subRank}">Sub-Rank</span>
+                    </li>
+                </ul>
+                <button th:onclick="'/schools/' + ${schoolId} + '/ranks/' + ${rank.id} + '/edit'" hx-get th:swap="outerHTML">Edit</button>
+                <button th:onclick="'/schools/' + ${schoolId} + '/ranks/' + ${rank.id} + '/delete'" hx-delete th:swap="outerHTML">Delete</button>
+            </li>
+        </ul>
+        <h3>Add Rank</h3>
+        <form th:action="'/schools/' + ${schoolId} + '/ranks'" method="post" hx-post th:target="#rank-list" hx-swap="outerHTML">
+            <div>
+                <label>Rank Name:</label>
+                <input type="text" name="name" />
+            </div>
+            <div>
+                <label>Sub-Ranks (comma-separated):</label>
+                <input type="text" name="subRanks" />
+            </div>
+            <div>
+                <button type="submit">Add Rank</button>
+            </div>
+        </form>
+    </div>
+</main>
+</body>
+</html>
