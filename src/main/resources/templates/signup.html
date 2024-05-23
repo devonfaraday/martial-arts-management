@@ -4,8 +4,8 @@
     <title>Sign Up</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
-<header th:insert="~{layout :: header}"></header>
 <body>
+<header th:insert="layout/header :: header"></header>
 <main>
     <h1>Sign Up</h1>
     <form th:action="@{/organization/signup}" th:object="${registrationForm}" method="post">
