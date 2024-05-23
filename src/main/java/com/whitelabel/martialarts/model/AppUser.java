@@ -2,7 +2,6 @@ package com.whitelabel.martialarts.model;
 
 import jakarta.persistence.*;
 import java.sql.Timestamp;
-import com.whitelabel.martialarts.model.Organization;
 
 @Entity
 public class AppUser {
