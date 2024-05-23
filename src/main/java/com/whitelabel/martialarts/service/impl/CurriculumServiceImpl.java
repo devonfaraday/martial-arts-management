@@ -15,7 +15,7 @@ public class CurriculumServiceImpl implements CurriculumService {
     private CurriculumRepository curriculumRepository;
 
     @Override
-    public List<Curriculum> getAllCurricula() {
+    public List<Curriculum> getAllCurriculum() {
         return curriculumRepository.findAll();
     }
 

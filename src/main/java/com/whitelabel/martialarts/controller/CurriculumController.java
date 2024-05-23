@@ -16,8 +16,8 @@ public class CurriculumController {
     private CurriculumService curriculumService;
 
     @GetMapping
-    public List<Curriculum> getAllCurricula() {
-        return curriculumService.getAllCurricula();
+    public List<Curriculum> getAllCurriculum() {
+        return curriculumService.getAllCurriculum();
     }
 
     @GetMapping("/{id}")
