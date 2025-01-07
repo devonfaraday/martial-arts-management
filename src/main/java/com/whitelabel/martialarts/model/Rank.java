@@ -13,10 +13,6 @@ public class Rank {
     @ElementCollection
     private List<String> subRanks;
 
-    @ManyToOne
-    @JoinColumn(name = "school_id")
-    private School school;
-
     @OneToMany(mappedBy = "rank")
     private List<Student> students;
 
@@ -44,14 +40,6 @@ public class Rank {
 
     public void setSubRanks(List<String> subRanks) {
         this.subRanks = subRanks;
-    }
-
-    public School getSchool() {
-        return school;
-    }
-
-    public void setSchool(School school) {
-        this.school = school;
     }
 
     public List<Student> getStudents() {

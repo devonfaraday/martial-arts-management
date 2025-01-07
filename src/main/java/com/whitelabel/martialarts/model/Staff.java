@@ -16,14 +16,6 @@ public class Staff {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "school_id")
-    private School school;
-
-    @ManyToOne
-    @JoinColumn(name = "location_id")
-    private Location location;
-
     // Getters and setters
 
     public Long getId() {
@@ -88,21 +80,5 @@ public class Staff {
 
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public School getSchool() {
-        return school;
-    }
-
-    public void setSchool(School school) {
-        this.school = school;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
     }
 }

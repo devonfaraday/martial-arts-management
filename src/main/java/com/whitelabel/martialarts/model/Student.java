@@ -15,13 +15,6 @@ public class Student {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "school_id")
-    private School school;
-
-    @ManyToOne
-    @JoinColumn(name = "location_id")
-    private Location location;
 
     @ManyToOne
     @JoinColumn(name = "rank_id")
@@ -83,22 +76,6 @@ public class Student {
 
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public School getSchool() {
-        return school;
-    }
-
-    public void setSchool(School school) {
-        this.school = school;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
     }
 
     public Rank getRank() {

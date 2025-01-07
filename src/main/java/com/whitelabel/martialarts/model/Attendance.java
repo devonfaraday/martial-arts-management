@@ -15,10 +15,6 @@ public class Attendance {
     private Timestamp updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "class_session_id")
-    private ClassSession classSession;
-
-    @ManyToOne
     @JoinColumn(name = "student_id")
     private Student student;
 
@@ -62,14 +58,6 @@ public class Attendance {
 
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public ClassSession getClassSession() {
-        return classSession;
-    }
-
-    public void setClassSession(ClassSession classSession) {
-        this.classSession = classSession;
     }
 
     public Student getStudent() {

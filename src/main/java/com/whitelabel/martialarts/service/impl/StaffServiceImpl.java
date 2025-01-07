@@ -39,7 +39,6 @@ public class StaffServiceImpl implements StaffService {
         existingStaff.setEmail(staff.getEmail());
         existingStaff.setPhoneNumber(staff.getPhoneNumber());
         existingStaff.setRole(staff.getRole());
-        existingStaff.setLocation(staff.getLocation());
         return staffRepository.save(existingStaff);
     }
 

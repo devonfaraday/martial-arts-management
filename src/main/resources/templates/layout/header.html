@@ -18,14 +18,9 @@
                     <a href="/" hx-get="/">Home</a>
                     <a href="/locations" hx-get="/locations">Locations</a>
                     <div th:if="${#authorization.expression('isAuthenticated')}">
-                        <a href="/school" hx-get="/school">School</a>
-                        <a href="/students" hx-get="/students">Students</a>
+                        <!-- <a href="/students" hx-get="/students">Students</a> -->
                         <a href="/staff" hx-get="/staff">Staff</a>
-                        <a href="/classes" hx-get="/classes">Classes</a>
-                        <a href="/events" hx-get="/events">Events</a>
-                        <a href="/announcements" hx-get="/announcements">Announcements</a>
-                        <a href="/login" hx-get="/login">Login</a>
-                        <a href="/organization/view/1" hx-get="/organization/view/1">Organization</a>
+                        <!-- <a href="/organization/view/1" hx-get="/organization/view/1">Organization</a> -->
                     </div>
                 </nav>
             </div>

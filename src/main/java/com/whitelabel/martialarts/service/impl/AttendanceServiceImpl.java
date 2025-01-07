@@ -36,7 +36,6 @@ public class AttendanceServiceImpl implements AttendanceService {
                 .orElseThrow(() -> new RuntimeException("Attendance not found with id: " + id));
         existingAttendance.setDate(attendance.getDate());
         existingAttendance.setStatus(attendance.getStatus());
-        existingAttendance.setClassSession(attendance.getClassSession());
         existingAttendance.setStudent(attendance.getStudent());
         return attendanceRepository.save(existingAttendance);
     }
