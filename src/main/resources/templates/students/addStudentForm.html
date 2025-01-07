@@ -1,0 +1,24 @@
+<div th:fragment="addStudentForm">
+    <h2>Add Student</h2>
+        <form th:action="@{/students/add}" method="post">
+            <div>
+                <label>First Name:</label>
+                <input type="text" name="firstName" />
+            </div>
+            <div>
+                <label>Last Name:</label>
+                <input type="text" name="lastName" />
+            </div>
+            <div>
+                <label>Email:</label>
+                <input type="email" name="email" />
+            </div>
+            <div>
+                <label>Phone:</label>
+                <input type="text" name="phoneNumber" />
+            </div>
+            <div>
+                <button type="submit">Add Student</button>
+            </div>
+        </form>
+</div>

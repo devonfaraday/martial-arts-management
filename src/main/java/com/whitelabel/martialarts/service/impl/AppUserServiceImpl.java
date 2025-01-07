@@ -4,8 +4,12 @@ import com.whitelabel.martialarts.model.AppUser;
 import com.whitelabel.martialarts.repository.AppUserRepository;
 import com.whitelabel.martialarts.service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Optional;
 import java.util.List;
 
 @Service
@@ -14,9 +18,19 @@ public class AppUserServiceImpl implements AppUserService {
     @Autowired
     private AppUserRepository appUserRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public List<AppUser> getAllAppUsers() {
         return appUserRepository.findAll();
+    }
+
+    @Override
+    public AppUser getCurrentUser() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<AppUser> optionalUser = appUserRepository.findByUsername(userDetails.getUsername());
+        return optionalUser.orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @Override
@@ -27,6 +41,7 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public AppUser createAppUser(AppUser appUser) {
+        appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         return appUserRepository.save(appUser);
     }
 
@@ -35,7 +50,6 @@ public class AppUserServiceImpl implements AppUserService {
         AppUser existingAppUser = appUserRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
         existingAppUser.setUsername(appUser.getUsername());
-        existingAppUser.setPassword(appUser.getPassword());
         existingAppUser.setFirstName(appUser.getFirstName());
         existingAppUser.setLastName(appUser.getLastName());
         existingAppUser.setEmail(appUser.getEmail());
@@ -43,6 +57,12 @@ public class AppUserServiceImpl implements AppUserService {
         existingAppUser.setOrganization(appUser.getOrganization());
         existingAppUser.setCreatedAt(appUser.getCreatedAt());
         existingAppUser.setUpdatedAt(appUser.getUpdatedAt());
+        
+        // Encode the password before saving if it has changed
+        if (!appUser.getPassword().equals(existingAppUser.getPassword())) {
+            existingAppUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
+        }
+        
         return appUserRepository.save(existingAppUser);
     }
 

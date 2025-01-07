@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/organization")
@@ -20,12 +21,26 @@ public class OrganizationController {
     @Autowired
     private AppUserService appUserService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/view")
+    public String getCurrentUserOrganization(Model model) {
+        AppUser currentUser = appUserService.getCurrentUser(); // Fetch the current user
+        Long organizationId = currentUser.getOrganizationId(); // Get the organization ID
+        return "redirect:/organization/view/" + organizationId; // Redirect to the specific organization view
+    }
+
+    @GetMapping("/view/{id}")
     public String getOrganization(@PathVariable Long id, Model model) {
         Organization organization = organizationService.getOrganization(id);
         model.addAttribute("organization", organization);
-        return "organization/view";
+        return "organization/organization"; // Path to your Thymeleaf template
     }
+
+    // @GetMapping("/organization/view/{id}")
+    // public String viewOrganization(@PathVariable Long id, Model model) {
+    //     Organization organization = organizationService.getOrganization(id);
+    //     model.addAttribute("organization", organization);
+    //     return "organization/organization";
+    // }
 
     @GetMapping("/edit/{id}")
     public String editOrganization(@PathVariable Long id, Model model) {
