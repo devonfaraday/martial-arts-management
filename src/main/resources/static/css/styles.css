@@ -91,3 +91,30 @@ form button[type="submit"] {
 form button[type="submit"]:hover {
     background-color: #0056b3;
 }
+
+input[type="text"],
+input[type="password"] {
+    width: 100%; /* Make both fields span the same width */
+    max-width: 400px; /* Optional: Set a maximum width */
+    padding: 10px; /* Ensure consistent padding */
+    font-size: 16px; /* Match font size for consistency */
+    box-sizing: border-box; /* Include padding and border in width calculation */
+}
+
+/* Style for the sign-up button */
+.signup-button {
+    background-color: #28a745; /* Green color for distinction */
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-left: 10px; /* Add spacing between buttons */
+    display: inline-block; /* Ensure it behaves like a button */
+    transition: background-color 0.3s ease;
+}
+
+.signup-button:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+

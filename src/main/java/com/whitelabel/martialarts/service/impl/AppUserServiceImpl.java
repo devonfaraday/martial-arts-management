@@ -55,8 +55,6 @@ public class AppUserServiceImpl implements AppUserService {
         existingAppUser.setEmail(appUser.getEmail());
         existingAppUser.setRole(appUser.getRole());
         existingAppUser.setOrganization(appUser.getOrganization());
-        existingAppUser.setCreatedAt(appUser.getCreatedAt());
-        existingAppUser.setUpdatedAt(appUser.getUpdatedAt());
         
         // Encode the password before saving if it has changed
         if (!appUser.getPassword().equals(existingAppUser.getPassword())) {

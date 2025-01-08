@@ -21,8 +21,6 @@ public class AppUser implements UserDetails {
     private String lastName;
     private String email;
     private String role;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "organization_id")
@@ -76,22 +74,6 @@ public class AppUser implements UserDetails {
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public Organization getOrganization() {

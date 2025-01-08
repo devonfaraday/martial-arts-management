@@ -1,33 +1,44 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-
-    <head>
-        <title>Martial Arts Management</title>
-        <script src="https://unpkg.com/htmx.org@1.5.0"></script>
-        <link rel="stylesheet" th:href="@{/css/styles.css}">
-    </head>
-
-    <body>
-        <header th:fragment="header">
-            <div class="header-container">
-                <div class="logo">
-                    <img th:src="@{/images/CashIn-Icon.png}" alt="Martial Arts Management Logo">
+<header>
+    <nav class="bg-blue-600 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <img src="/path/to/logo.png" alt="Martial Arts Management Logo" class="h-10 w-10 rounded-full mr-3" />
+                    <span class="text-white text-xl font-bold">Martial Arts Management</span>
                 </div>
-                <h1>Martial Arts Management</h1>
-                <nav>
-                    <a href="/" hx-get="/">Home</a>
-                    <a href="/locations" hx-get="/locations">Locations</a>
-                    <div th:if="${#authorization.expression('isAuthenticated')}">
-                        <!-- <a href="/students" hx-get="/students">Students</a> -->
-                        <a href="/staff" hx-get="/staff">Staff</a>
-                        <!-- <a href="/organization/view/1" hx-get="/organization/view/1">Organization</a> -->
-                    </div>
-                </nav>
-            </div>
-        </header>
-        <main th:replace="content">
-            <!-- This will be replaced by fragments in other templates -->
-        </main>
-    </body>
 
-</html>
+                <!-- Navigation Links -->
+                <div class="hidden md:flex space-x-6">
+                    <a href="/" class="text-white hover:text-gray-200 text-sm font-medium">Home</a>
+                    <a href="/students" class="text-white hover:text-gray-200 text-sm font-medium">Students</a>
+                    <a href="/staff" class="text-white hover:text-gray-200 text-sm font-medium">Staff</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-white focus:outline-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-blue-500">
+            <a href="/" class="block text-white px-4 py-2 hover:bg-blue-700">Home</a>
+            <a href="/locations" class="block text-white px-4 py-2 hover:bg-blue-700">Locations</a>
+            <a href="/staff" class="block text-white px-4 py-2 hover:bg-blue-700">Staff</a>
+        </div>
+    </nav>
+</header>
+
+<script>
+    // Toggle mobile menu visibility
+    document.getElementById('mobile-menu-button').addEventListener('click', function () {
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenu.classList.toggle('hidden');
+    });
+</script>

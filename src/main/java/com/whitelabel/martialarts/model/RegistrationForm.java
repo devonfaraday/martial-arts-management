@@ -4,11 +4,7 @@ public class RegistrationForm {
     private Organization organization;
     private AppUser appUser;
 
-    public RegistrationForm() {
-        this.organization = new Organization();
-        this.appUser = new AppUser();
-    }
-
+    // Getters and setters
     public Organization getOrganization() {
         return organization;
     }
