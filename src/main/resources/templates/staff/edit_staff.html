@@ -2,22 +2,61 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Edit Staff Member</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<header th:replace="~{layout/header :: header}"></header>
-<body>
-<h1>Edit Staff Member</h1>
-<form th:action="@{/staff/edit/{id}(id=${staff.id})}" th:object="${staff}" method="post">
-    <label for="firstName">First Name:</label>
-    <input type="text" id="firstName" th:field="*{firstName}" required/>
-    <label for="lastName">Last Name:</label>
-    <input type="text" id="lastName" th:field="*{lastName}" required/>
-    <label for="email">Email:</label>
-    <input type="email" id="email" th:field="*{email}" required/>
-    <label for="role">Role:</label>
-    <input type="text" id="role" th:field="*{role}" required/>
-    <button type="submit">Save</button>
-</form>
-<a th:href="@{/templates/staff/staff}">Back to List</a>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header th:replace="~{layout/header :: header}"></header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex items-center justify-center p-6">
+        <div class="bg-white shadow-md rounded-lg w-full max-w-lg p-8">
+            <!-- Page Title -->
+            <h1 class="text-2xl font-bold text-blue-600 mb-6 text-center">Add Staff Member</h1>
+
+            <!-- Add Staff Form -->
+            <form th:action="@{/staff/edit/{id}(id=${staff.id})}" th:object="${staff}" method="post" class="space-y-6">
+                <!-- First Name -->
+                <div>
+                    <label for="firstName" class="block text-sm font-medium text-gray-700">First Name</label>
+                    <input type="text" id="firstName" th:field="*{firstName}" required
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+                </div>
+
+                <!-- Last Name -->
+                <div>
+                    <label for="lastName" class="block text-sm font-medium text-gray-700">Last Name</label>
+                    <input type="text" id="lastName" th:field="*{lastName}" required
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="email" th:field="*{email}" required
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+                </div>
+
+                <!-- Role -->
+                <div>
+                    <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
+                    <input type="text" id="role" th:field="*{role}" required
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex justify-between items-center">
+                    <button type="submit"
+                        class="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700 transition duration-300">
+                        Save
+                    </button>
+                    <a th:href="@{/staff}"
+                        class="bg-gray-600 text-white px-6 py-2 rounded-lg shadow hover:bg-gray-700 transition duration-300">
+                        Back to List
+                    </a>
+                </div>
+            </form>
+        </div>
+    </main>
 </body>
 </html>

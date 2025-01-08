@@ -5,11 +5,11 @@
                 <!-- Logo -->
                 <div class="flex items-center">
                     <img src="/path/to/logo.png" alt="Martial Arts Management Logo" class="h-10 w-10 rounded-full mr-3" />
-                    <span class="text-white text-xl font-bold">Martial Arts Management</span>
+                    <a href="/" class="text-white text-xl font-bold">Martial Arts Management</span>
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden md:flex space-x-6">
+                <div class="hidden md:flex space-x-6" sec:authorize="isAuthenticated()">
                     <a href="/" class="text-white hover:text-gray-200 text-sm font-medium">Home</a>
                     <a href="/students" class="text-white hover:text-gray-200 text-sm font-medium">Students</a>
                     <a href="/staff" class="text-white hover:text-gray-200 text-sm font-medium">Staff</a>

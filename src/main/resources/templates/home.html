@@ -2,15 +2,32 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Martial Arts Management</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<header th:insert="~{layout/header :: header}"></header>
-<main>
-    <h1>Welcome to Martial Arts Management</h1>
-    <p>Manage your martial arts school efficiently and effectively.</p>
-    <a href="/login">Sign In</a>
-    <a href="organization/signup">Sign Up</a>
-</main>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header th:insert="~{layout/header :: header}"></header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex items-center justify-center p-6">
+        <div class="bg-white shadow-md rounded-lg w-full max-w-3xl p-8 text-center">
+            <h1 class="text-3xl font-bold text-blue-600 mb-4">Welcome to Martial Arts Management</h1>
+            <p class="text-gray-700 text-lg mb-6">
+                Manage your martial arts school efficiently and effectively.
+            </p>
+
+            <!-- Buttons -->
+            <div class="flex justify-center space-x-4">
+                <a href="/login"
+                   class="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700 transition duration-300">
+                    Sign In
+                </a>
+                <a href="/organization/signup"
+                   class="bg-green-600 text-white px-6 py-2 rounded-lg shadow hover:bg-green-700 transition duration-300">
+                    Sign Up
+                </a>
+            </div>
+        </div>
+    </main>
 </body>
 </html>
