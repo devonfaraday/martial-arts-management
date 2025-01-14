@@ -2,7 +2,8 @@ package com.whitelabel.martialarts.service.impl;
 
 import com.whitelabel.martialarts.model.Student;
 import com.whitelabel.martialarts.repository.StudentRepository;
-import com.whitelabel.martialarts.service.StudentService;
+import com.whitelabel.martialarts.service.service.StudentService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

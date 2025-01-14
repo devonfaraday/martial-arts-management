@@ -1,7 +1,8 @@
 package com.whitelabel.martialarts.controller;
 
 import com.whitelabel.martialarts.model.Rank;
-import com.whitelabel.martialarts.service.RankService;
+import com.whitelabel.martialarts.service.service.RankService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

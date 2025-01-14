@@ -2,7 +2,8 @@ package com.whitelabel.martialarts.service.impl;
 
 import com.whitelabel.martialarts.model.Rank;
 import com.whitelabel.martialarts.repository.RankRepository;
-import com.whitelabel.martialarts.service.RankService;
+import com.whitelabel.martialarts.service.service.RankService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.whitelabel.martialarts.service;
+package com.whitelabel.martialarts.service.service;
 
 import com.whitelabel.martialarts.model.Organization;
 

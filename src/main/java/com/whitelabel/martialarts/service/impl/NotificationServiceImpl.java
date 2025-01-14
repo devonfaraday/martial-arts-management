@@ -2,7 +2,8 @@ package com.whitelabel.martialarts.service.impl;
 
 import com.whitelabel.martialarts.model.Notification;
 import com.whitelabel.martialarts.repository.NotificationRepository;
-import com.whitelabel.martialarts.service.NotificationService;
+import com.whitelabel.martialarts.service.service.NotificationService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

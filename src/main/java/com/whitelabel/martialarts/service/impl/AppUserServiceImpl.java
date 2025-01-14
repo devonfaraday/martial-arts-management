@@ -2,7 +2,8 @@ package com.whitelabel.martialarts.service.impl;
 
 import com.whitelabel.martialarts.model.AppUser;
 import com.whitelabel.martialarts.repository.AppUserRepository;
-import com.whitelabel.martialarts.service.AppUserService;
+import com.whitelabel.martialarts.service.service.AppUserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

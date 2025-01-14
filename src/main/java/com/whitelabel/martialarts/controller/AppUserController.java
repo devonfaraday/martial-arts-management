@@ -1,7 +1,8 @@
 package com.whitelabel.martialarts.controller;
 
 import com.whitelabel.martialarts.model.AppUser;
-import com.whitelabel.martialarts.service.AppUserService;
+import com.whitelabel.martialarts.service.service.AppUserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

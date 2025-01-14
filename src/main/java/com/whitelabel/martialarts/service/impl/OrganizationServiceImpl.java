@@ -2,7 +2,8 @@ package com.whitelabel.martialarts.service.impl;
 
 import com.whitelabel.martialarts.model.Organization;
 import com.whitelabel.martialarts.repository.OrganizationRepository;
-import com.whitelabel.martialarts.service.OrganizationService;
+import com.whitelabel.martialarts.service.service.OrganizationService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

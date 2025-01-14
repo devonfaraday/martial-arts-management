@@ -2,7 +2,8 @@ package com.whitelabel.martialarts.service.impl;
 
 import com.whitelabel.martialarts.model.Membership;
 import com.whitelabel.martialarts.repository.MembershipRepository;
-import com.whitelabel.martialarts.service.MembershipService;
+import com.whitelabel.martialarts.service.service.MembershipService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

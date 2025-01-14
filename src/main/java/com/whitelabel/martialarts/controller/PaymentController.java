@@ -1,7 +1,8 @@
 package com.whitelabel.martialarts.controller;
 
 import com.whitelabel.martialarts.model.Payment;
-import com.whitelabel.martialarts.service.PaymentService;
+import com.whitelabel.martialarts.service.service.PaymentService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

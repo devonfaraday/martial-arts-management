@@ -1,23 +1,62 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Students</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <title>Manage Students</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-<header th:insert="~{layout/header :: header}"></header>
-<main>
-    <div id="student-list" th:fragment="studentList">
-        <h2>Student List</h2>
-        <ul>
-            <li th:each="student : ${students}">
-                <span th:text="${student.firstName} + ' ' + ${student.lastName}">Student Name</span>
-                <span th:text="${student.email}">Student Email</span>
-                <span th:text="${student.phoneNumber}">Student Phone</span>
-            </li>
-        </ul>
-        <div th:replace="~{::addStudentForm}"></div>
-    </div>
-</main>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header th:replace="~{layout/header :: header}"></header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex items-center justify-center p-6">
+        <div class="bg-white shadow-md rounded-lg w-full max-w-6xl p-8">
+            <!-- Page Title -->
+            <h1 class="text-2xl font-bold text-blue-600 mb-6 text-center">Manage Students</h1>
+
+            <!-- Add New Student Button -->
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-gray-800">Student List</h2>
+                <a href="/students/add"
+                   class="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition duration-300">
+                    Add New Student
+                </a>
+            </div>
+
+            <!-- Student Table -->
+            <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">ID</th>
+                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">Full Name</th>
+                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">Email</th>
+                        <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Iterate Over Students -->
+                    <tr th:each="student : ${students}" class="border-t border-gray-200">
+                        <td class="px-4 py-2 text-sm text-gray-800" th:text="${student.id}">1</td>
+                        <td class="px-4 py-2 text-sm text-blue-600">
+                            <a th:href="@{/students/edit/{id}(id=${student.id})}" 
+                               class="hover:underline" 
+                               th:text="${student.firstName} + ' ' + ${student.lastName}">
+                                John
+                            </a>
+                        </td>
+                        <td class="px-4 py-2 text-sm text-gray-800" th:text="${student.email}">john.doe@example.com</td>
+                        <td class="px-4 py-2 text-sm text-gray-800" th:text="${student.studentStatus}">No Status</td>
+                    </tr>
+                
+                    <!-- No Data Message -->
+                    <tr th:if="${#lists.isEmpty(students)}" class="border-t border-gray-200">
+                        <td colspan="5" class="px-4 py-6 text-center text-sm text-gray-500">
+                            No students found.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
 </body>
 </html>

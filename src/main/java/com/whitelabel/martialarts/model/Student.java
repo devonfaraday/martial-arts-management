@@ -1,26 +1,63 @@
 package com.whitelabel.martialarts.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.EnumType;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private String firstName;
     private String lastName;
     private String email;
     private String phoneNumber;
+
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
+    @Enumerated(EnumType.STRING) // Persist enum as a string in the database
+    private StudentStatus status = StudentStatus.PROSPECT; // Default value
 
     @ManyToOne
     @JoinColumn(name = "rank_id")
     private Rank rank;
 
-    // Getters and setters
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Note> notes = new ArrayList<>();
+
+    // Billing Info
+    @Embedded
+    private BillingInfo billingInfo;
+
+    // Emergency Contacts
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "student_id")
+    private List<EmergencyContact> emergencyContacts;
+
+    // Attendance Records
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "student_id")
+    private List<Attendance> attendanceRecords;
+
+    // Home Address
+    @Embedded
+    private Address homeAddress;
+
+    // Getters and Setters
 
     public Long getId() {
         return id;
@@ -84,5 +121,41 @@ public class Student {
 
     public void setRank(Rank rank) {
         this.rank = rank;
+    }
+
+    public BillingInfo getBillingInfo() {
+        return billingInfo;
+    }
+
+    public void setBillingInfo(BillingInfo billingInfo) {
+        this.billingInfo = billingInfo;
+    }
+
+    public List<EmergencyContact> getEmergencyContacts() {
+        return emergencyContacts;
+    }
+
+    public void setEmergencyContacts(List<EmergencyContact> emergencyContacts) {
+        this.emergencyContacts = emergencyContacts;
+    }
+
+    public List<Attendance> getAttendanceRecords() {
+        return attendanceRecords;
+    }
+
+    public void setAttendanceRecords(List<Attendance> attendanceRecords) {
+        this.attendanceRecords = attendanceRecords;
+    }
+
+    public Address getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(Address homeAddress) {
+        this.homeAddress = homeAddress;
+    }
+
+    public StudentStatus getStudentStatus() {
+        return status;
     }
 }

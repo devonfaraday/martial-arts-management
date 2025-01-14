@@ -3,8 +3,9 @@ package com.whitelabel.martialarts.controller;
 import com.whitelabel.martialarts.model.AppUser;
 import com.whitelabel.martialarts.model.Organization;
 import com.whitelabel.martialarts.model.RegistrationForm;
-import com.whitelabel.martialarts.service.AppUserService;
-import com.whitelabel.martialarts.service.OrganizationService;
+import com.whitelabel.martialarts.service.service.AppUserService;
+import com.whitelabel.martialarts.service.service.OrganizationService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

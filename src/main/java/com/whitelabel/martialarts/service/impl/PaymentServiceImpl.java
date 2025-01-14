@@ -2,7 +2,8 @@ package com.whitelabel.martialarts.service.impl;
 
 import com.whitelabel.martialarts.model.Payment;
 import com.whitelabel.martialarts.repository.PaymentRepository;
-import com.whitelabel.martialarts.service.PaymentService;
+import com.whitelabel.martialarts.service.service.PaymentService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
