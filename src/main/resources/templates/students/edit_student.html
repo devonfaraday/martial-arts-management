@@ -232,14 +232,14 @@
                 <label for="status" class="block text-sm font-medium text-gray-700">Student Status</label>
                 <select id="status" 
                         name="status" 
-                        th:value="${student.status}"
                         th:hx-put="@{/students/{id}/status(id=${student.id})}"
                         hx-trigger="change" 
                         hx-swap="none"
                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                     <option th:each="status : ${statuses}" 
                             th:value="${status.name()}" 
-                            th:text="${status.displayName}">
+                            th:text="${status.displayName}"
+                            th:selected="${student.status == status}">
                     </option>
                 </select>
             </div>
