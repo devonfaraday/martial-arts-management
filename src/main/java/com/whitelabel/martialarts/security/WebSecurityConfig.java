@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.http.HttpMethod;
 
 @Configuration
 @EnableWebSecurity
@@ -20,20 +23,22 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
             .authorizeHttpRequests((authz) -> authz
-                .requestMatchers("/**", "/home", "/login", "/signup", "/css/**",  "/js/**", "/images/**").permitAll()
-                .anyRequest().authenticated()
-            )
+                    .requestMatchers("/**", "/home", "/login", "/signup", "/css/**", "/js/**", "/images/**").permitAll()
+                    .requestMatchers(HttpMethod.PUT, "/students/*/status").permitAll()
+                    .anyRequest().authenticated())
+            .csrf((csrf) -> csrf
+                    .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                    .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
             .formLogin((form) -> form
-                .loginPage("/login")
-                .permitAll()
-            )
+                    .loginPage("/login")
+                    .permitAll())
             .logout((logout) -> logout.permitAll())
             .userDetailsService(userDetailsService);
-        return http.build();
-    }
+    return http.build();
+}
 
     @Bean
     public PasswordEncoder passwordEncoder() {

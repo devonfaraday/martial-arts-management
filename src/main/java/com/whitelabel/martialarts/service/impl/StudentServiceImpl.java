@@ -1,11 +1,15 @@
 package com.whitelabel.martialarts.service.impl;
 
 import com.whitelabel.martialarts.model.Student;
+import com.whitelabel.martialarts.model.StudentStatus;
 import com.whitelabel.martialarts.repository.StudentRepository;
 import com.whitelabel.martialarts.service.service.StudentService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.Timestamp;
 
 import java.util.List;
 
@@ -46,5 +50,11 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void deleteStudent(Long id) {
         studentRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void updateStatus(Long id, StudentStatus status) {
+        studentRepository.updateStatus(id, status, new Timestamp(System.currentTimeMillis()));
     }
 }

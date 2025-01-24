@@ -4,6 +4,12 @@
     <head>
         <title>Student Details</title>
         <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://unpkg.com/htmx.org@1.9.6"
+            integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni"
+            crossorigin="anonymous"></script>
+            <meta name="csrf-token" th:content="${_csrf.token}" />
+            <meta name="csrf-header" th:content="${_csrf.headerName}" />
+            <script src="/js/csrf-config.js"></script>
     </head>
 
     <body class="bg-gray-100 min-h-screen flex flex-col">
@@ -61,35 +67,35 @@
                             <div>
                                 <label for="homeAddress.street"
                                     class="block text-sm font-medium text-gray-700">Street</label>
-                                <input type="text" id="homeAddress.street" th:field="*{homeAddress.street}" 
+                                <input type="text" id="homeAddress.street" th:field="*{homeAddress.street}"
                                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
                             </div>
 
                             <div>
                                 <label for="homeAddress.city"
                                     class="block text-sm font-medium text-gray-700">City</label>
-                                <input type="text" id="homeAddress.city" th:field="*{homeAddress.city}" 
+                                <input type="text" id="homeAddress.city" th:field="*{homeAddress.city}"
                                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
                             </div>
 
                             <div>
                                 <label for="homeAddress.state"
                                     class="block text-sm font-medium text-gray-700">State</label>
-                                <input type="text" id="homeAddress.state" th:field="*{homeAddress.state}" 
+                                <input type="text" id="homeAddress.state" th:field="*{homeAddress.state}"
                                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
                             </div>
 
                             <div>
                                 <label for="homeAddress.zipCode" class="block text-sm font-medium text-gray-700">ZIP
                                     Code</label>
-                                <input type="text" id="homeAddress.zipCode" th:field="*{homeAddress.zipCode}" 
+                                <input type="text" id="homeAddress.zipCode" th:field="*{homeAddress.zipCode}"
                                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
                             </div>
 
                             <div>
                                 <label for="homeAddress.country"
                                     class="block text-sm font-medium text-gray-700">Country</label>
-                                <input type="text" id="homeAddress.country" th:field="*{homeAddress.country}" 
+                                <input type="text" id="homeAddress.country" th:field="*{homeAddress.country}"
                                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
                             </div>
                         </div>
@@ -103,7 +109,6 @@
                                 <label for="billingInfo.cardNumber" class="block text-sm font-medium text-gray-700">Card
                                     Number</label>
                                 <input type="text" id="billingInfo.cardNumber" th:field="*{billingInfo.cardNumber}"
-                                    
                                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
                             </div>
 
@@ -111,7 +116,7 @@
                                 <label for="billingInfo.cardHolderName"
                                     class="block text-sm font-medium text-gray-700">Cardholder Name</label>
                                 <input type="text" id="billingInfo.cardHolderName"
-                                    th:field="*{billingInfo.cardHolderName}" 
+                                    th:field="*{billingInfo.cardHolderName}"
                                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
                             </div>
 
@@ -119,7 +124,7 @@
                                 <label for="billingInfo.expirationDate"
                                     class="block text-sm font-medium text-gray-700">Expiration Date</label>
                                 <input type="text" id="billingInfo.expirationDate"
-                                    th:field="*{billingInfo.expirationDate}" placeholder="MM/YY" 
+                                    th:field="*{billingInfo.expirationDate}" placeholder="MM/YY"
                                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
                             </div>
 
@@ -127,7 +132,6 @@
                                 <label for="billingInfo.securityCode"
                                     class="block text-sm font-medium text-gray-700">Security Code (CVV)</label>
                                 <input type="text" id="billingInfo.securityCode" th:field="*{billingInfo.securityCode}"
-                                    
                                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
                             </div>
 
@@ -135,7 +139,7 @@
                                 <label for="billingInfo.billingStreet"
                                     class="block text-sm font-medium text-gray-700">Billing Street</label>
                                 <input type="text" id="billingInfo.billingStreet"
-                                    th:field="*{billingInfo.billingStreet}" 
+                                    th:field="*{billingInfo.billingStreet}"
                                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
                             </div>
 
@@ -143,7 +147,6 @@
                                 <label for="billingInfo.billingCity"
                                     class="block text-sm font-medium text-gray-700">Billing City</label>
                                 <input type="text" id="billingInfo.billingCity" th:field="*{billingInfo.billingCity}"
-                                    
                                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
                             </div>
 
@@ -151,7 +154,6 @@
                                 <label for="billingInfo.billingState"
                                     class="block text-sm font-medium text-gray-700">Billing State</label>
                                 <input type="text" id="billingInfo.billingState" th:field="*{billingInfo.billingState}"
-                                    
                                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
                             </div>
 
@@ -159,7 +161,7 @@
                                 <label for="billingInfo.billingZipCode"
                                     class="block text-sm font-medium text-gray-700">Billing ZIP Code</label>
                                 <input type="text" id="billingInfo.billingZipCode"
-                                    th:field="*{billingInfo.billingZipCode}" 
+                                    th:field="*{billingInfo.billingZipCode}"
                                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
                             </div>
 
@@ -225,17 +227,24 @@
                 </form>
             </div>
 
-            <form th:object="${student}">
-                <div class="bg-white shadow-md rounded-lg p-6 ml-6 w-[300px] h-fit border border-gray-200">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Update Status</h2>
-                    <label for="status" class="block text-sm font-medium text-gray-700">Student Status</label>
-                    <select id="status" th:field="*{status}"
+            <div class="bg-white shadow-md rounded-lg p-6 ml-6 w-[300px] h-fit border border-gray-200">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Update Status</h2>
+                <label for="status" class="block text-sm font-medium text-gray-700">Student Status</label>
+                <select id="status" 
+                        name="status" 
+                        th:value="${student.status}"
+                        th:hx-put="@{/students/{id}/status(id=${student.id})}"
+                        hx-trigger="change" 
+                        hx-swap="none"
                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                        <option th:each="status : ${statuses}" th:value="${status}" th:text="${status.displayName}">
-                        </option>
-                    </select>
-                </div>
-            </form>
+                    <option th:each="status : ${statuses}" 
+                            th:value="${status.name()}" 
+                            th:text="${status.displayName}">
+                    </option>
+                </select>
+            </div>
+
+
         </main>
     </body>
 

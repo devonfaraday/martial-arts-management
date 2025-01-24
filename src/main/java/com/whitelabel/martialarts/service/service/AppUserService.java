@@ -1,7 +1,6 @@
 package com.whitelabel.martialarts.service.service;
 
 import com.whitelabel.martialarts.model.AppUser;
-import java.util.Optional;
 import java.util.List;
 
 public interface AppUserService {

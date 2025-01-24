@@ -6,13 +6,19 @@ import com.whitelabel.martialarts.model.Student;
 import com.whitelabel.martialarts.model.StudentStatus;
 import com.whitelabel.martialarts.service.service.StudentService;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Arrays;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @Controller
 @RequestMapping("/students")
@@ -23,6 +29,8 @@ public class StudentController {
 
     @Autowired
     private NoteService noteService;
+
+    private static final Logger log = LoggerFactory.getLogger(StudentController.class);
 
     @GetMapping
     public String getAllStudents(Model model) {
@@ -101,4 +109,20 @@ public class StudentController {
         noteService.deleteNote(noteId); // Delete the note by its ID
         return "redirect:/students/" + studentId; // Redirect back to the student's detail page
     }
+
+    @PutMapping("/{id}/status")
+public ResponseEntity<Void> updateStatus(
+        @PathVariable Long id, 
+        @RequestParam("status") String statusStr) {
+    try {
+        log.info("Received status update request - ID: {} Status: {}", id, statusStr);
+        StudentStatus status = StudentStatus.valueOf(statusStr);
+        log.info("Converted to enum: {}", status);
+        studentService.updateStatus(id, status);
+        return ResponseEntity.ok().build();
+    } catch (Exception e) {
+        log.error("Error updating status", e);
+        return ResponseEntity.internalServerError().build();
+    }
+}
 }
