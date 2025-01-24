@@ -155,7 +155,11 @@ public class Student {
         this.homeAddress = homeAddress;
     }
 
-    public StudentStatus getStudentStatus() {
+    public StudentStatus getStatus() {
         return status;
+    }
+    
+    public void setStatus(StudentStatus status) {
+        this.status = status;
     }
 }

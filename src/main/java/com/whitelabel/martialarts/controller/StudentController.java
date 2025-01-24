@@ -3,6 +3,7 @@ package com.whitelabel.martialarts.controller;
 import com.whitelabel.martialarts.model.Note;
 import com.whitelabel.martialarts.service.service.NoteService;
 import com.whitelabel.martialarts.model.Student;
+import com.whitelabel.martialarts.model.StudentStatus;
 import com.whitelabel.martialarts.service.service.StudentService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Arrays;
 
 @Controller
 @RequestMapping("/students")
@@ -53,8 +55,14 @@ public class StudentController {
     @GetMapping("/edit/{id}")
     public String editStudentForm(@PathVariable Long id, Model model) {
         Student student = studentService.getStudentById(id);
+        if (student.getStatus() == null) {
+            student.setStatus(StudentStatus.ACTIVE); // Set a default if null
+        }
+        System.out.println("Student: " + student); // Log student details
+        System.out.println("Statuses: " + Arrays.toString(StudentStatus.values())); // Log statu
         model.addAttribute("student", student);
-        return "students/edit_student"; // Note the subfolder reference
+        model.addAttribute("statuses", StudentStatus.values());
+        return "students/edit_student";
     }
 
     @PostMapping("/edit/{id}")
