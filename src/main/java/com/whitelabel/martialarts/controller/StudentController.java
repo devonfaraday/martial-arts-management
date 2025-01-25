@@ -1,5 +1,7 @@
 package com.whitelabel.martialarts.controller;
 
+import com.whitelabel.martialarts.model.Address;
+import com.whitelabel.martialarts.model.BillingInfo;
 import com.whitelabel.martialarts.model.Note;
 import com.whitelabel.martialarts.service.service.NoteService;
 import com.whitelabel.martialarts.model.Student;
@@ -17,8 +19,6 @@ import java.util.List;
 import java.util.Arrays;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 @Controller
 @RequestMapping("/students")
@@ -64,20 +64,53 @@ public class StudentController {
     public String editStudentForm(@PathVariable Long id, Model model) {
         Student student = studentService.getStudentById(id);
         if (student.getStatus() == null) {
-            student.setStatus(StudentStatus.ACTIVE); // Set a default if null
+            student.setStatus(StudentStatus.ACTIVE);
         }
-        System.out.println("Student: " + student); // Log student details
-        System.out.println("Statuses: " + Arrays.toString(StudentStatus.values())); // Log statu
+        // Initialize nested objects if null
+        if (student.getHomeAddress() == null) {
+            student.setHomeAddress(new Address());
+        }
+        if (student.getBillingInfo() == null) {
+            student.setBillingInfo(new BillingInfo());
+        }
         model.addAttribute("student", student);
         model.addAttribute("statuses", StudentStatus.values());
         return "students/edit_student";
     }
 
     @PostMapping("/edit/{id}")
-    public String updateStudent(@PathVariable Long id, @ModelAttribute Student student) {
-        studentService.updateStudent(id, student);
-        return "redirect:/students";
+    public String updateStudent(Model model, @PathVariable Long id, @ModelAttribute("student") Student student) {
+        Student existingStudent = studentService.getStudentById(id);
+        StudentStatus currentStatus = existingStudent.getStatus(); // Store current status
+    
+        // Preserve existing data that isn't in the form
+        if (student.getHomeAddress() != null) {
+            existingStudent.setHomeAddress(student.getHomeAddress());
+        }
+        if (student.getBillingInfo() != null) {
+            existingStudent.setBillingInfo(student.getBillingInfo());
+        }
+    
+        // Update all fields
+        existingStudent.setFirstName(student.getFirstName());
+        existingStudent.setLastName(student.getLastName());
+        existingStudent.setEmail(student.getEmail());
+        existingStudent.setPhoneNumber(student.getPhoneNumber());
+        
+        // Only update status if it's explicitly changed in the form
+        if (student.getStatus() != null && student.getStatus() != StudentStatus.PROSPECT) {
+            existingStudent.setStatus(student.getStatus());
+        } else {
+            existingStudent.setStatus(currentStatus); // Maintain existing status
+        }
+    
+        Student updatedStudent = studentService.updateStudent(id, existingStudent);
+        model.addAttribute("student", updatedStudent);
+        model.addAttribute("statuses", StudentStatus.values());
+        
+        return "students/edit_student";
     }
+    
 
     @GetMapping("/delete/{id}")
     public String deleteStudent(@PathVariable Long id) {
@@ -111,18 +144,18 @@ public class StudentController {
     }
 
     @PutMapping("/{id}/status")
-public ResponseEntity<Void> updateStatus(
-        @PathVariable Long id, 
-        @RequestParam("status") String statusStr) {
-    try {
-        log.info("Received status update request - ID: {} Status: {}", id, statusStr);
-        StudentStatus status = StudentStatus.valueOf(statusStr);
-        log.info("Converted to enum: {}", status);
-        studentService.updateStatus(id, status);
-        return ResponseEntity.ok().build();
-    } catch (Exception e) {
-        log.error("Error updating status", e);
-        return ResponseEntity.internalServerError().build();
+    public ResponseEntity<Void> updateStatus(
+            @PathVariable Long id,
+            @RequestParam("status") String statusStr) {
+        try {
+            log.info("Received status update request - ID: {} Status: {}", id, statusStr);
+            StudentStatus status = StudentStatus.valueOf(statusStr);
+            log.info("Converted to enum: {}", status);
+            studentService.updateStatus(id, status);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("Error updating status", e);
+            return ResponseEntity.internalServerError().build();
+        }
     }
-}
 }
