@@ -1,24 +1,28 @@
 package com.whitelabel.martialarts.controller;
 
-import com.whitelabel.martialarts.model.Address;
-import com.whitelabel.martialarts.model.BillingInfo;
-import com.whitelabel.martialarts.model.Note;
-import com.whitelabel.martialarts.service.service.NoteService;
-import com.whitelabel.martialarts.model.Student;
-import com.whitelabel.martialarts.model.StudentStatus;
-import com.whitelabel.martialarts.service.service.StudentService;
+import java.util.List;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-import java.util.Arrays;
-
-import org.slf4j.Logger;
+import com.whitelabel.martialarts.model.Address;
+import com.whitelabel.martialarts.model.BillingInfo;
+import com.whitelabel.martialarts.model.Note;
+import com.whitelabel.martialarts.model.Student;
+import com.whitelabel.martialarts.model.StudentStatus;
+import com.whitelabel.martialarts.service.service.NoteService;
+import com.whitelabel.martialarts.service.service.StudentService;
 
 @Controller
 @RequestMapping("/students")
