@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="note" class="bg-gray-50 p-3 rounded mb-2">
+        <div class="text-sm text-gray-600" 
+             th:text="${#temporals.format(note.createdAt, 'MM/dd/yyyy HH:mm')}"></div>
+        <div class="text-gray-800" th:text="${note.content}"></div>
+    </div>
+</body>
+</html>

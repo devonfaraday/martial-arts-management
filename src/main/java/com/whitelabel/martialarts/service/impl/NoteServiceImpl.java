@@ -25,10 +25,15 @@ public class NoteServiceImpl implements NoteService {
                 .orElseThrow(() -> new IllegalArgumentException("Note not found with ID: " + id));
     }
 
-    @Override
-    public Note createNote(Note note) {
-        return noteRepository.save(note);
+    // In NoteServiceImpl.java
+@Override
+public Note createNote(Note note) {
+    if (note.getContent() == null || note.getContent().trim().isEmpty()) {
+        throw new IllegalArgumentException("Note content cannot be empty");
     }
+    return noteRepository.save(note);
+}
+
 
     @Override
     public Note updateNote(Long id, Note updatedNote) {

@@ -250,19 +250,60 @@
             <!-- Status Box -->
 
             <!-- Status Box with original HTMX functionality -->
-            <div class="w-80 bg-white shadow-lg rounded-lg p-6 h-fit">
-                <h2 class="text-lg font-semibold text-gray-800 mb-4">Update Status</h2>
-                <div class="space-y-4">
-                    <label for="status" class="block text-sm font-medium text-gray-700">Student Status</label>
-                    <select id="status" name="status" th:hx-put="@{/students/{id}/status(id=${student.id})}"
-                        hx-trigger="change" hx-swap="none"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                        <option th:each="status : ${statuses}" th:value="${status.name()}"
-                            th:text="${status.displayName}" th:selected="${student.status == status}">
-                        </option>
-                    </select>
+            <div class="space-y-6">
+                <!-- Status Component -->
+                <div class="w-80 bg-white shadow-lg rounded-lg p-6 h-fit">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Update Status</h2>
+                    <div class="space-y-4">
+                        <label for="status" class="block text-sm font-medium text-gray-700">Student Status</label>
+                        <select id="status" name="status" th:hx-put="@{/students/{id}/status(id=${student.id})}"
+                            hx-trigger="change" hx-swap="none"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            <option th:each="status : ${statuses}" th:value="${status.name()}"
+                                th:text="${status.displayName}" th:selected="${student.status == status}">
+                            </option>
+                        </select>
+                    </div>
                 </div>
+
+
+                <!-- Notes Component -->
+                <div class="w-80 bg-white shadow-lg rounded-lg p-6 h-fit">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">Student Notes</h2>
+                    <div id="notes-list" class="max-h-60 overflow-y-auto mb-4">
+                        <!-- Simple test to see if notes are displaying -->
+                        <div th:each="note : ${student.notes}" class="bg-gray-50 p-3 rounded mb-2">
+                            <div class="text-sm text-gray-600" 
+                                 th:text="${#temporals.format(note.createdAt, 'MM/dd/yyyy HH:mm')}"></div>
+                            <div class="text-gray-800" th:text="${note.content}"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Test text -->
+                    <p>Test Text</p>
+                    
+                    <!-- Notes input section -->
+                    <div class="space-y-3">
+                        <label for="noteContent" class="block text-sm font-medium text-gray-700">Add Note</label>
+                        <textarea id="noteContent" 
+                                  name="content" 
+                                  rows="3"
+                                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                  required></textarea>
+                        <button th:hx-post="@{/students/{id}/notes/add(id=${student.id})}"
+                                hx-target="#notes-list"
+                                hx-swap="beforeend"
+                                hx-include="#noteContent"
+                                class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                            Add Note
+                        </button>
+                    </div>
+                </div>
+                
             </div>
+
+            </div>
+
         </main>
     </body>
 
