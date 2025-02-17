@@ -15,4 +15,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     void updateStatus(@Param("id") Long id, 
                      @Param("status") StudentStatus status,
                      @Param("updatedAt") Timestamp updatedAt);
+
+    long countByStatus(StudentStatus status);
 }
