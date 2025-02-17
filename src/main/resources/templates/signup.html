@@ -13,7 +13,7 @@
         <div class="bg-white shadow-md rounded-lg w-full max-w-2xl p-8">
             <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Sign Up</h1>
 
-            <form th:action="@{/organization/signup}" th:object="${registrationForm}" method="post" class="space-y-6">
+            <form th:action="@{/organization/signup}" th:object="${registrationForm}" method="post" class="space-y-6" id="signupForm">
                 <!-- Organization Details -->
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700">Organization Name</label>

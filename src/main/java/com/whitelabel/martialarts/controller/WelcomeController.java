@@ -8,13 +8,19 @@ import com.whitelabel.martialarts.model.Organization;
 import com.whitelabel.martialarts.model.RegistrationForm;
 
 import org.springframework.ui.Model;
+import java.security.Principal;
 
 @Controller
-public class HomeController {
+public class WelcomeController {
 
     @GetMapping("/")
-    public String home() {
-        return "home";
+    public String welcome(Principal principal) {
+        // If already logged in, forward to dashboard
+        if (principal != null) {
+            return "redirect:/dashboard";
+        }
+        // Otherwise, show your public welcome page; you could rename the view from "home" to "welcome"
+        return "welcome";
     }
 
     @GetMapping("/login")

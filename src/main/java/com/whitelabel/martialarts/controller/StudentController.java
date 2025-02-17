@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -86,7 +87,7 @@ public class StudentController {
     public String updateStudent(Model model, @PathVariable Long id, @ModelAttribute("student") Student student) {
         Student existingStudent = studentService.getStudentById(id);
         StudentStatus currentStatus = existingStudent.getStatus(); // Store current status
-    
+
         // Preserve existing data that isn't in the form
         if (student.getHomeAddress() != null) {
             existingStudent.setHomeAddress(student.getHomeAddress());
@@ -94,27 +95,26 @@ public class StudentController {
         if (student.getBillingInfo() != null) {
             existingStudent.setBillingInfo(student.getBillingInfo());
         }
-    
+
         // Update all fields
         existingStudent.setFirstName(student.getFirstName());
         existingStudent.setLastName(student.getLastName());
         existingStudent.setEmail(student.getEmail());
         existingStudent.setPhoneNumber(student.getPhoneNumber());
-        
+
         // Only update status if it's explicitly changed in the form
         if (student.getStatus() != null && student.getStatus() != StudentStatus.PROSPECT) {
             existingStudent.setStatus(student.getStatus());
         } else {
             existingStudent.setStatus(currentStatus); // Maintain existing status
         }
-    
+
         Student updatedStudent = studentService.updateStudent(id, existingStudent);
         model.addAttribute("student", updatedStudent);
         model.addAttribute("statuses", StudentStatus.values());
-        
+
         return "students/edit_student";
     }
-    
 
     @GetMapping("/delete/{id}")
     public String deleteStudent(@PathVariable Long id) {
@@ -133,18 +133,26 @@ public class StudentController {
 
     // New endpoint: Handle form submission for adding a note
     @PostMapping("/{id}/notes/add")
-    public String createNote(@PathVariable Long id, @ModelAttribute Note note) {
+    public String createNote(@PathVariable Long id,
+            @RequestParam("content") String content,
+            Model model) {
         Student student = studentService.getStudentById(id);
-        note.setStudent(student); // Associate the note with the student
-        noteService.createNote(note); // Save the note
-        return "redirect:/students/" + id; // Redirect back to the student's detail page
+
+        Note note = new Note();
+        note.setContent(content);
+        note.setStudent(student);
+
+        noteService.createNote(note);
+
+        model.addAttribute("note", note);
+        return "components/note :: note";
     }
 
     // New endpoint: Delete a specific note by its ID
     @GetMapping("/{studentId}/notes/delete/{noteId}")
     public String deleteNote(@PathVariable Long studentId, @PathVariable Long noteId) {
         noteService.deleteNote(noteId); // Delete the note by its ID
-        return "redirect:/students/" + studentId; // Redirect back to the student's detail page
+        return "components/note :: note"; // Redirect back to the student's detail page
     }
 
     @PutMapping("/{id}/status")
@@ -162,4 +170,13 @@ public class StudentController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+    // Add this exception handler in your controller
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public String handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ex.getMessage();
+    }
+
 }
