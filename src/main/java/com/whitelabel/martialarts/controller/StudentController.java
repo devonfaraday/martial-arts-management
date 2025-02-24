@@ -147,9 +147,15 @@ public String createNote(@PathVariable Long id,
 
     // New endpoint: Delete a specific note by its ID
     @GetMapping("/{studentId}/notes/delete/{noteId}")
-    public String deleteNote(@PathVariable Long studentId, @PathVariable Long noteId) {
-        noteService.deleteNote(noteId); // Delete the note by its ID
-        return "components/note :: note"; // Redirect back to the student's detail page
+    public String deleteNote(@PathVariable Long studentId, 
+                             @PathVariable Long noteId,
+                             Model model) {
+        Student student = studentService.getStudentById(studentId);
+
+        noteService.deleteNote(noteId);
+        
+        model.addAttribute("student", student);// Delete the note by its ID
+        return "students/edit_student :: notes-container"; // Redirect back to the student's detail page
     }
 
     @PutMapping("/{id}/status")
