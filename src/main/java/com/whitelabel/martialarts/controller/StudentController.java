@@ -17,7 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Arrays;
 
 import org.slf4j.Logger;
 
@@ -118,31 +117,33 @@ public class StudentController {
         return "redirect:/students";
     }
 
-    // New endpoint: Show form to add a note for a student
-    @GetMapping("/{id}/notes/add")
-    public String addNoteForm(@PathVariable Long id, Model model) {
-        Student student = studentService.getStudentById(id);
-        model.addAttribute("student", student);
-        model.addAttribute("note", new Note()); // Create a new Note object for the form
-        return "students/add_note"; // View template for adding a note
-    }
+    // // New endpoint: Show form to add a note for a student
+    // @GetMapping("/{id}/notes/add")
+    // public String addNoteForm(@PathVariable Long id, Model model) {
+    //     Student student = studentService.getStudentById(id);
+    //     model.addAttribute("student", student);
+    //     model.addAttribute("note", new Note()); // Create a new Note object for the form
+    //     return "students/add_note"; // View template for adding a note
+    // }
 
     // New endpoint: Handle form submission for adding a note
     @PostMapping("/{id}/notes/add")
-    public String createNote(@PathVariable Long id,
-            @RequestParam("content") String content,
-            Model model) {
-        Student student = studentService.getStudentById(id);
+public String createNote(@PathVariable Long id,
+                         @RequestParam("content") String content,
+                         Model model) {
+    Student student = studentService.getStudentById(id);
 
-        Note note = new Note();
-        note.setContent(content);
-        note.setStudent(student);
+    Note note = new Note();
+    note.setContent(content);
+    note.setStudent(student);
 
-        noteService.createNote(note);
+    noteService.createNote(note);
 
-        model.addAttribute("note", note);
-        return "components/note :: note";
-    }
+    // Add the updated student to the model so the fragment has access to student.notes
+    model.addAttribute("student", student);
+    return "students/edit_student :: notes-container";
+}
+
 
     // New endpoint: Delete a specific note by its ID
     @GetMapping("/{studentId}/notes/delete/{noteId}")

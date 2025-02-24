@@ -7,6 +7,7 @@
         <script src="https://unpkg.com/htmx.org@1.9.6"
             integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni"
             crossorigin="anonymous"></script>
+            
         <meta name="csrf-token" th:content="${_csrf.token}" />
         <meta name="csrf-header" th:content="${_csrf.headerName}" />
         <script src="/js/csrf-config.js"></script>
@@ -268,10 +269,10 @@
 
 
                 <!-- Notes Component -->
+            <div id="notes-container" th:fragment="notes-container">
                 <div class="w-80 bg-white shadow-lg rounded-lg p-6 h-fit">
                     <h2 class="text-lg font-semibold text-gray-800 mb-4">Student Notes</h2>
                     <div id="notes-list" class="max-h-60 overflow-y-auto mb-4">
-                        <!-- Simple test to see if notes are displaying -->
                         <div th:each="note : ${student.notes}" class="bg-gray-50 p-3 rounded mb-2">
                             <div class="text-sm text-gray-600" 
                                  th:text="${#temporals.format(note.createdAt, 'MM/dd/yyyy HH:mm')}"></div>
@@ -288,15 +289,15 @@
                                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                                   required></textarea>
                         <button th:hx-post="@{/students/{id}/notes/add(id=${student.id})}"
-                                hx-target="#notes-list"
-                                hx-swap="beforeend"
+                                hx-target="#notes-container"
+                                hx-swap="innerHTML"
                                 hx-include="#noteContent"
                                 class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
                             Add Note
                         </button>
                     </div>
                 </div>
-                
+            </div>
             </div>
 
             </div>
