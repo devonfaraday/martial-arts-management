@@ -9,21 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import com.whitelabel.martialarts.model.Address;
-import com.whitelabel.martialarts.model.BillingInfo;
-import com.whitelabel.martialarts.model.Note;
-import com.whitelabel.martialarts.model.Student;
-import com.whitelabel.martialarts.model.StudentStatus;
-import com.whitelabel.martialarts.service.service.NoteService;
-import com.whitelabel.martialarts.service.service.StudentService;
+import java.util.List;
+
+import org.slf4j.Logger;
 
 @Controller
 @RequestMapping("/students")
@@ -122,37 +112,45 @@ public class StudentController {
         return "redirect:/students";
     }
 
-    // New endpoint: Show form to add a note for a student
-    @GetMapping("/{id}/notes/add")
-    public String addNoteForm(@PathVariable Long id, Model model) {
-        Student student = studentService.getStudentById(id);
-        model.addAttribute("student", student);
-        model.addAttribute("note", new Note()); // Create a new Note object for the form
-        return "students/add_note"; // View template for adding a note
-    }
+    // // New endpoint: Show form to add a note for a student
+    // @GetMapping("/{id}/notes/add")
+    // public String addNoteForm(@PathVariable Long id, Model model) {
+    //     Student student = studentService.getStudentById(id);
+    //     model.addAttribute("student", student);
+    //     model.addAttribute("note", new Note()); // Create a new Note object for the form
+    //     return "students/add_note"; // View template for adding a note
+    // }
 
     // New endpoint: Handle form submission for adding a note
     @PostMapping("/{id}/notes/add")
-    public String createNote(@PathVariable Long id,
-            @RequestParam("content") String content,
-            Model model) {
-        Student student = studentService.getStudentById(id);
+public String createNote(@PathVariable Long id,
+                         @RequestParam("content") String content,
+                         Model model) {
+    Student student = studentService.getStudentById(id);
 
-        Note note = new Note();
-        note.setContent(content);
-        note.setStudent(student);
+    Note note = new Note();
+    note.setContent(content);
+    note.setStudent(student);
 
-        noteService.createNote(note);
+    noteService.createNote(note);
 
-        model.addAttribute("note", note);
-        return "components/note :: note";
-    }
+    // Add the updated student to the model so the fragment has access to student.notes
+    model.addAttribute("student", student);
+    return "students/edit_student :: notes-container";
+}
+
 
     // New endpoint: Delete a specific note by its ID
     @GetMapping("/{studentId}/notes/delete/{noteId}")
-    public String deleteNote(@PathVariable Long studentId, @PathVariable Long noteId) {
-        noteService.deleteNote(noteId); // Delete the note by its ID
-        return "components/note :: note"; // Redirect back to the student's detail page
+    public String deleteNote(@PathVariable Long studentId, 
+                             @PathVariable Long noteId,
+                             Model model) {
+        Student student = studentService.getStudentById(studentId);
+
+        noteService.deleteNote(noteId);
+        
+        model.addAttribute("student", student);// Delete the note by its ID
+        return "students/edit_student :: notes-container"; // Redirect back to the student's detail page
     }
 
     @PutMapping("/{id}/status")

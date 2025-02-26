@@ -34,6 +34,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
                     .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
             .formLogin((form) -> form
                     .loginPage("/login")
+                    .defaultSuccessUrl("/dashboard", true)
                     .permitAll())
             .logout((logout) -> logout.permitAll())
             .userDetailsService(userDetailsService);
