@@ -13,8 +13,8 @@ import java.security.Principal;
 @Controller
 public class WelcomeController {
 
-    @GetMapping("/")
-    public String welcome(Principal principal) {
+    @GetMapping("/welcome")
+    public String welcomePage(Principal principal) {
         // If already logged in, forward to dashboard
         if (principal != null) {
             return "redirect:/dashboard";
@@ -26,16 +26,5 @@ public class WelcomeController {
     @GetMapping("/login")
     public String login() {
         return "login";
-    }
-
-   @GetMapping("/signup")
-    public String signup(Model model) {
-        // Add a RegistrationForm object to the model
-        RegistrationForm registrationForm = new RegistrationForm();
-        registrationForm.setOrganization(new Organization());
-        registrationForm.setAppUser(new AppUser());
-        model.addAttribute("registrationForm", registrationForm);
-
-        return "signup";
     }
 }

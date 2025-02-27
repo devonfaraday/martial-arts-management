@@ -37,24 +37,44 @@
                 <!-- Membership Financials -->
                 <div class="w-80 bg-white shadow-lg rounded-lg p-6 h-fit mt-6">
                     <h2 class="text-md font-semibold text-blue-600 mb-2">Membership Financials</h2>
-                    <p class="text-sm text-gray-700">
-                        <span class="font-medium">Monthly Fee:</span>
-                        <!-- <span th:text="${student.membership.monthlyFee} + ' USD'"></span> -->
-                    </p>
-                    <p class="text-sm text-gray-700">
-                        <span class="font-medium">Next Payment Due:</span>
-                        <!-- <span th:text="${#temporals.format(student.membership.nextPaymentDate, 'MM/dd/yyyy')}"></span> -->
-                    </p>
-                    <p class="text-sm text-gray-700">
-                        <span class="font-medium">Outstanding Balance:</span>
-                        <!-- <span th:text="${student.membership.outstandingBalance} + ' USD'"></span> -->
-                    </p>
-                    <!-- th:href="@{/students/{id}/make-payment(id=${student.id})}" -->
-                    <!-- Optional Action Button -->
-                    <button
-                        class="mt-4 w-full bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition duration-300">
-                        Make Payment
-                    </button>
+                    
+                    <!-- If subscription exists, show details -->
+                    <div th:if="${student.subscription != null && student.subscription.active}">
+                        <p class="text-sm text-gray-700">
+                            <span class="font-medium">Payment Plan:</span>
+                            <span th:text="${student.subscription.interval.displayName}"></span>
+                        </p>
+                        <p class="text-sm text-gray-700">
+                            <span class="font-medium">Amount:</span>
+                            <span th:text="'$' + ${student.subscription.amount}"></span>
+                        </p>
+                        <p class="text-sm text-gray-700">
+                            <span class="font-medium">Next Payment:</span>
+                            <span th:text="${#temporals.format(student.subscription.nextBillingDate, 'MM/dd/yyyy')}"></span>
+                        </p>
+                        <p class="text-sm text-gray-700 mb-4">
+                            <span class="font-medium">Status:</span>
+                            <span class="text-green-600 font-medium">Active</span>
+                        </p>
+                        
+                        <!-- Manage subscription button -->
+                        <a th:href="@{/students/{id}/manage-subscription(id=${student.id})}"
+                            class="mt-2 w-full bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition duration-300 inline-block text-center">
+                            Manage Subscription
+                        </a>
+                    </div>
+                    
+                    <!-- If no subscription, show setup button -->
+                    <div th:unless="${student.subscription != null && student.subscription.active}">
+                        <p class="text-sm text-gray-700 mb-4">
+                            No active payment plan. Set up recurring payments for this student.
+                        </p>
+                        
+                        <a th:href="@{/students/{id}/setup-payment(id=${student.id})}"
+                            class="mt-2 w-full bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition duration-300 inline-block text-center">
+                            Setup Payment
+                        </a>
+                    </div>
                 </div>
             </div>
             <!-- Main Form Container -->

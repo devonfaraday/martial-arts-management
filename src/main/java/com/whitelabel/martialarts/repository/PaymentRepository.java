@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
     List<Payment> findByStudentId(Long studentId);
+    List<Payment> findBySchoolId(Long schoolId);
 }

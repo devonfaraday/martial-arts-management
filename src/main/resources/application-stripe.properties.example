@@ -1,0 +1,8 @@
+stripe.api.publishable-key=pk_test_your_publishable_key_here
+stripe.api.secret-key=sk_test_your_secret_key_here
+stripe.base.url=http://localhost:8080
+stripe.success.url=http://localhost:8080/payment/success
+stripe.cancel.url=http://localhost:8080/payment/cancel
+stripe.platform.fee.percentage=10
+stripe.connect.client.id=ca_your_connect_client_id_here
+stripe.webhook.secret=whsec_your_webhook_secret_here

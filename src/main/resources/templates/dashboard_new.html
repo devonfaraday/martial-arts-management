@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header th:replace="~{layout/header :: header}"></header>
+
+    <!-- Main Content -->
+    <main class="flex-grow p-6">
+        <div class="container mx-auto">
+            <h1 class="text-3xl font-bold text-blue-600 mb-6">Dashboard</h1>
+            
+            <!-- School Info Section (if school exists) -->
+            <div th:if="${school != null}" class="mb-6 bg-white shadow-md rounded-lg p-4">
+                <h2 class="text-xl font-semibold mb-2" th:text="${school.name}">School Name</h2>
+                
+                <!-- Stripe Connect Status -->
+                <div th:if="${school.stripeConnectEnabled != null}" class="mt-4 p-4 rounded-lg" th:classappend="${school.stripeConnectEnabled} ? 'bg-green-100' : 'bg-yellow-100'">
+                    <div class="flex items-center">
+                        <div th:if="${school.stripeConnectEnabled}" class="mr-2">✅</div>
+                        <div th:unless="${school.stripeConnectEnabled}" class="mr-2">⚠️</div>
+                        <div>
+                            <p class="font-medium" th:if="${school.stripeConnectEnabled}">Stripe Connect is active</p>
+                            <p class="font-medium" th:unless="${school.stripeConnectEnabled}">Stripe Connect is not set up</p>
+                            <p class="text-sm text-gray-600" th:if="${school.stripeConnectEnabled}">Your account is fully set up and ready to accept payments.</p>
+                            <p class="text-sm text-gray-600" th:unless="${school.stripeConnectEnabled}">
+                                <a href="/school/settings" class="text-blue-600 hover:underline">Set up Stripe Connect</a> to start accepting payments.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stats Box -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div th:each="entry : ${studentStats}"
+                     class="bg-white shadow-md rounded-lg p-4 flex flex-col items-center">
+                    <h2 class="text-xl font-semibold" th:text="${entry.key.displayName}">Status Name</h2>
+                    <p class="text-gray-700 text-2xl mt-2" th:text="${entry.value}">0</p>
+                </div>
+            </div>
+            
+            <!-- Quick Stats -->
+            <div th:if="${studentCount != null}" class="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-white shadow-md rounded-lg p-4">
+                    <h3 class="text-lg font-medium text-gray-700">Total Students</h3>
+                    <p class="text-2xl font-bold text-blue-600 mt-2" th:text="${studentCount}">0</p>
+                </div>
+                <div class="bg-white shadow-md rounded-lg p-4">
+                    <h3 class="text-lg font-medium text-gray-700">Active Classes</h3>
+                    <p class="text-2xl font-bold text-blue-600 mt-2" th:text="${classCount}">0</p>
+                </div>
+                <div class="bg-white shadow-md rounded-lg p-4">
+                    <h3 class="text-lg font-medium text-gray-700">Monthly Revenue</h3>
+                    <p class="text-2xl font-bold text-blue-600 mt-2" th:text="${'$' + revenueMonth}">$0.00</p>
+                </div>
+                <div class="bg-white shadow-md rounded-lg p-4">
+                    <h3 class="text-lg font-medium text-gray-700">Pending Payments</h3>
+                    <p class="text-2xl font-bold text-blue-600 mt-2" th:text="${pendingPayments}">0</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

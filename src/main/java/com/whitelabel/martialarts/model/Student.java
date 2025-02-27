@@ -8,6 +8,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.EnumType;
@@ -35,6 +36,10 @@ public class Student {
     @ManyToOne
     @JoinColumn(name = "rank_id")
     private Rank rank;
+    
+    @ManyToOne
+    @JoinColumn(name = "school_id")
+    private School school;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Note> notes = new ArrayList<>();
@@ -56,6 +61,10 @@ public class Student {
     // Home Address
     @Embedded
     private Address homeAddress;
+
+    // Subscription
+    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Subscription subscription;
 
     // Getters and Setters
 
@@ -122,6 +131,14 @@ public class Student {
     public void setRank(Rank rank) {
         this.rank = rank;
     }
+    
+    public School getSchool() {
+        return school;
+    }
+    
+    public void setSchool(School school) {
+        this.school = school;
+    }
 
     public BillingInfo getBillingInfo() {
         return billingInfo;
@@ -170,5 +187,12 @@ public class Student {
     public void setNotes(List<Note> notes) {
         this.notes = notes;
     }
-    
+
+    public Subscription getSubscription() {
+        return subscription;
+    }
+
+    public void setSubscription(Subscription subscription) {
+        this.subscription = subscription;
+    }
 }

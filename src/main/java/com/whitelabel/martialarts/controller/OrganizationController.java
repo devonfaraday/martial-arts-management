@@ -75,13 +75,13 @@ public class OrganizationController {
         return "redirect:/organization";
     }
 
-    @GetMapping("/signup")
+    @GetMapping("/register-org")
     public String signupForm(Model model) {
         model.addAttribute("registrationForm", new RegistrationForm());
         return "/signup";
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/register-org")
     public String signup(@ModelAttribute RegistrationForm registrationForm) {
         Organization organization = registrationForm.getOrganization();
         AppUser appUser = registrationForm.getAppUser();

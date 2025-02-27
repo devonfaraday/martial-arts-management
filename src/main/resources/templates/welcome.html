@@ -2,7 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Martial Arts Management</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/tailwind.css}">
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
     <!-- Header -->
@@ -19,12 +21,12 @@
             <!-- Buttons -->
             <div class="flex justify-center space-x-4">
                 <a href="/login"
-                   class="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700 transition duration-300">
-                    Sign In
+                   class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition duration-300">
+                    Login
                 </a>
                 <a href="/organization/signup"
-                   class="bg-green-600 text-white px-6 py-2 rounded-lg shadow hover:bg-green-700 transition duration-300">
-                    Sign Up
+                   class="bg-green-600 text-white px-6 py-3 rounded-lg shadow hover:bg-green-700 transition duration-300">
+                    Register
                 </a>
             </div>
         </div>
