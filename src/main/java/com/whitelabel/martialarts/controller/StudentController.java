@@ -3,9 +3,11 @@ package com.whitelabel.martialarts.controller;
 import com.whitelabel.martialarts.model.Address;
 import com.whitelabel.martialarts.model.BillingInfo;
 import com.whitelabel.martialarts.model.Note;
-import com.whitelabel.martialarts.service.service.NoteService;
+import com.whitelabel.martialarts.model.School;
 import com.whitelabel.martialarts.model.Student;
 import com.whitelabel.martialarts.model.StudentStatus;
+import com.whitelabel.martialarts.repository.SchoolRepository;
+import com.whitelabel.martialarts.service.service.NoteService;
 import com.whitelabel.martialarts.service.service.StudentService;
 
 import org.slf4j.LoggerFactory;
@@ -29,6 +31,9 @@ public class StudentController {
 
     @Autowired
     private NoteService noteService;
+    
+    @Autowired
+    private SchoolRepository schoolRepository;
 
     private static final Logger log = LoggerFactory.getLogger(StudentController.class);
 
@@ -56,6 +61,11 @@ public class StudentController {
 
     @PostMapping("/add")
     public String createStudent(@ModelAttribute Student student) {
+        // Get the first school from the database
+        // In a real application, you would get the school associated with the logged-in user
+        School school = schoolRepository.findAll().stream().findFirst().orElse(null);
+        student.setSchool(school);
+        
         studentService.createStudent(student);
         return "redirect:/students";
     }
