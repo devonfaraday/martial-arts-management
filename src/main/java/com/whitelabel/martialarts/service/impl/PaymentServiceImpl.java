@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Optional;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -38,6 +40,43 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public List<Payment> getPaymentsForStudent(Long studentId) {
         return paymentRepository.findByStudentId(studentId);
+    }
+
+    @Override
+    public List<Payment> getAllPayments() {
+        return paymentRepository.findAll();
+    }
+
+    @Override
+    public Payment getPaymentById(Long id) {
+        return paymentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Payment not found with id: " + id));
+    }
+
+    @Override
+    @Transactional
+    public Payment updatePayment(Long id, Payment paymentDetails) {
+        Payment payment = getPaymentById(id);
+        
+        // Update payment details
+        payment.setAmount(paymentDetails.getAmount());
+        payment.setCurrency(paymentDetails.getCurrency());
+        payment.setStatus(paymentDetails.getStatus());
+        payment.setPaymentDate(paymentDetails.getPaymentDate());
+        
+        // If student is changed, update the relationship
+        if (paymentDetails.getStudent() != null) {
+            payment.setStudent(paymentDetails.getStudent());
+        }
+        
+        return paymentRepository.save(payment);
+    }
+
+    @Override
+    @Transactional
+    public void deletePayment(Long id) {
+        Payment payment = getPaymentById(id);
+        paymentRepository.delete(payment);
     }
 
     // Optionally add methods here to integrate with Stripe's PaymentIntent API.
