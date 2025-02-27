@@ -1,12 +1,14 @@
 package com.whitelabel.martialarts.service.impl;
 
 import com.whitelabel.martialarts.model.Payment;
+import com.whitelabel.martialarts.model.Student;
 import com.whitelabel.martialarts.repository.PaymentRepository;
+import com.whitelabel.martialarts.repository.StudentRepository;
 import com.whitelabel.martialarts.service.service.PaymentService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
@@ -14,38 +16,30 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
     private PaymentRepository paymentRepository;
+    
+    @Autowired
+    private StudentRepository studentRepository;
 
     @Override
-    public List<Payment> getAllPayments() {
-        return paymentRepository.findAll();
-    }
-
-    @Override
-    public Payment getPaymentById(Long id) {
-        return paymentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Payment not found with id: " + id));
-    }
-
-    @Override
+    @Transactional
     public Payment createPayment(Payment payment) {
-        return paymentRepository.save(payment);
+        // Persist the payment record.
+        Payment savedPayment = paymentRepository.save(payment);
+        
+        // Optionally update the student record if you need to adjust a balance or log the payment.
+        Student student = savedPayment.getStudent();
+        // For example, you might update the outstanding balance on the Student here.
+        // student.setOutstandingBalance(student.getOutstandingBalance().subtract(savedPayment.getAmount()));
+        // studentRepository.save(student);
+        
+        return savedPayment;
     }
 
     @Override
-    public Payment updatePayment(Long id, Payment payment) {
-        Payment existingPayment = paymentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Payment not found with id: " + id));
-        existingPayment.setAmount(payment.getAmount());
-        existingPayment.setStatus(payment.getStatus());
-        existingPayment.setPaymentDate(payment.getPaymentDate());
-        existingPayment.setPaymentMethod(payment.getPaymentMethod());
-        existingPayment.setStudent(payment.getStudent());
-        existingPayment.setMembership(payment.getMembership());
-        return paymentRepository.save(existingPayment);
+    public List<Payment> getPaymentsForStudent(Long studentId) {
+        return paymentRepository.findByStudentId(studentId);
     }
 
-    @Override
-    public void deletePayment(Long id) {
-        paymentRepository.deleteById(id);
-    }
+    // Optionally add methods here to integrate with Stripe's PaymentIntent API.
+    // For example, a method that calls Stripe, handles the response, and then records the payment.
 }

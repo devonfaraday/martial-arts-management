@@ -4,9 +4,9 @@ import com.whitelabel.martialarts.model.Payment;
 import java.util.List;
 
 public interface PaymentService {
-    List<Payment> getAllPayments();
-    Payment getPaymentById(Long id);
     Payment createPayment(Payment payment);
-    Payment updatePayment(Long id, Payment payment);
-    void deletePayment(Long id);
+    List<Payment> getPaymentsForStudent(Long studentId);
+    
+    // You may later add methods to process Stripe payment directly,
+    // for example: Payment processStripePayment(Long studentId, BigDecimal amount, String currency);
 }
