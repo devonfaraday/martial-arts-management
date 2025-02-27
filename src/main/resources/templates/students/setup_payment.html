@@ -4,78 +4,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Setup Payment</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="stylesheet" th:href="@{/css/tailwind.css}">
 </head>
-<body class="bg-gray-100 min-h-screen">
-    <header class="bg-white shadow">
-        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl font-bold text-gray-900">Setup Payment</h1>
-        </div>
-    </header>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header th:replace="~{layout/header :: header}"></header>
 
-    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div class="px-4 py-6 sm:px-0">
-            <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
-                <h2 class="text-lg font-medium text-gray-900 mb-4">
-                    Setup Payment for <span th:text="${student.firstName + ' ' + student.lastName}"></span>
-                </h2>
+    <main class="flex-grow container mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h1 class="text-2xl font-bold text-blue-600 mb-6">
+                Setup Payment for <span th:text="${student.firstName + ' ' + student.lastName}"></span>
+            </h1>
 
-                <form id="payment-form" method="POST" 
-                      th:action="@{/students/{id}/process-payment(id=${student.id})}">
-                
-                    <div class="space-y-6">
-                        <!-- Payment Amount -->
-                        <section>
-                            <label for="amount" class="block text-sm font-medium text-gray-700">Payment Amount ($)</label>
-                            <div class="mt-1">
-                                <input type="number" name="amount" id="amount" step="0.01" min="1" required
-                                       class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+            <form id="payment-form" method="POST" 
+                  th:action="@{/students/{id}/process-payment(id=${student.id})}">
+            
+                <div class="space-y-6">
+                    <!-- Payment Amount -->
+                    <section>
+                        <label for="amount" class="block text-sm font-medium text-gray-700">Payment Amount ($)</label>
+                        <div class="mt-1">
+                            <input type="number" name="amount" id="amount" step="0.01" min="1" required
+                                   class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                        <p class="mt-1 text-sm text-gray-500">This is the recurring amount that will be charged according to the selected interval.</p>
+                    </section>
+
+                    <!-- Billing Interval -->
+                    <section>
+                        <label for="interval" class="block text-sm font-medium text-gray-700">Billing Interval</label>
+                        <div class="mt-1">
+                            <select id="interval" name="interval" required
+                                    class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                <option value="">Select an interval</option>
+                                <option th:each="intervalOption : ${T(com.whitelabel.martialarts.model.SubscriptionInterval).values()}"
+                                        th:value="${intervalOption}"
+                                        th:text="${intervalOption.displayName}">
+                                </option>
+                            </select>
+                        </div>
+                        <p class="mt-1 text-sm text-gray-500">Choose how often the student will be billed.</p>
+                    </section>
+
+                    <!-- Terms Agreement -->
+                    <section>
+                        <div class="flex items-start">
+                            <div class="flex items-center h-5">
+                                <input id="agreeTerms" name="agreeTerms" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" required>
                             </div>
-                            <p class="mt-1 text-sm text-gray-500">This is the recurring amount that will be charged according to the selected interval.</p>
-                        </section>
-
-                        <!-- Billing Interval -->
-                        <section>
-                            <label for="interval" class="block text-sm font-medium text-gray-700">Billing Interval</label>
-                            <div class="mt-1">
-                                <select id="interval" name="interval" required
-                                        class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md">
-                                    <option value="">Select an interval</option>
-                                    <option th:each="intervalOption : ${T(com.whitelabel.martialarts.model.SubscriptionInterval).values()}"
-                                            th:value="${intervalOption}"
-                                            th:text="${intervalOption.displayName}">
-                                    </option>
-                                </select>
+                            <div class="ml-3 text-sm">
+                                <label for="agreeTerms" class="font-medium text-gray-700">I agree to recurring payments according to the selected interval</label>
+                                <p class="text-gray-500">By checking this box, you authorize regular payments according to the schedule above. You can cancel anytime.</p>
                             </div>
-                            <p class="mt-1 text-sm text-gray-500">Choose how often the student will be billed.</p>
-                        </section>
+                        </div>
+                    </section>
+                </div>
 
-                        <!-- Terms Agreement -->
-                        <section>
-                            <div class="flex items-start">
-                                <div class="flex items-center h-5">
-                                    <input id="agreeTerms" name="agreeTerms" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" required>
-                                </div>
-                                <div class="ml-3 text-sm">
-                                    <label for="agreeTerms" class="font-medium text-gray-700">I agree to recurring payments according to the selected interval</label>
-                                    <p class="text-gray-500">By checking this box, you authorize regular payments according to the schedule above. You can cancel anytime.</p>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-
-                    <!-- Form Actions -->
-                    <div class="mt-8 flex justify-end space-x-4">
-                        <a th:href="@{/students/edit/{id}(id=${student.id})}" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
-                            Cancel
-                        </a>
-                        <button type="submit" id="submit-button" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-                            Proceed to Payment
-                        </button>
-                    </div>
-                </form>
-            </div>
+                <!-- Form Actions -->
+                <div class="mt-8 flex justify-end space-x-4">
+                    <a th:href="@{/students/edit/{id}(id=${student.id})}" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
+                        Cancel
+                    </a>
+                    <button type="submit" id="submit-button" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                        Proceed to Payment
+                    </button>
+                </div>
+            </form>
         </div>
     </main>
+    <!-- Footer -->
+    <footer th:replace="~{layout/footer :: footer}"></footer>
 </body>
 </html>

@@ -2,17 +2,46 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Student Detail</title>
-  <link rel="stylesheet" th:href="@{/css/styles.css}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" th:href="@{/css/tailwind.css}">
 </head>
-<body>
-<header th:insert="~{layout/header :: header}"></header>
-<main>
-  <h1>Student Detail</h1>
-  <p>First Name: <span th:text="${student.firstName}"></span></p>
-  <p>Last Name: <span th:text="${student.lastName}"></span></p>
-  <p>Email: <span th:text="${student.email}"></span></p>
-  <p>Phone: <span th:text="${student.phoneNumber}"></span></p>
-  <a th:href="@{/students}">Back to List</a>
-</main>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+  <!-- Header -->
+  <header th:replace="~{layout/header :: header}"></header>
+  
+  <!-- Main Content -->
+  <main class="flex-grow container mx-auto p-6">
+    <div class="bg-white shadow-md rounded-lg p-8 max-w-3xl mx-auto">
+      <h1 class="text-2xl font-bold text-blue-600 mb-6">Student Detail</h1>
+      
+      <div class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <p class="text-sm text-gray-600">First Name</p>
+            <p class="font-medium text-gray-800" th:text="${student.firstName}"></p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">Last Name</p>
+            <p class="font-medium text-gray-800" th:text="${student.lastName}"></p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">Email</p>
+            <p class="font-medium text-gray-800" th:text="${student.email}"></p>
+          </div>
+          <div>
+            <p class="text-sm text-gray-600">Phone</p>
+            <p class="font-medium text-gray-800" th:text="${student.phoneNumber}"></p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-8 flex justify-between">
+        <a th:href="@{/students}" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg shadow hover:bg-gray-400 transition duration-300">
+          Back to List
+        </a>
+      </div>
+    </div>
+  </main>
 </body>
 </html>

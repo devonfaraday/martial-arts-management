@@ -15,7 +15,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
+            .csrf(csrf -> csrf.ignoringRequestMatchers("/stripe-webhook/**"))
             .authorizeHttpRequests(authz -> authz
                 .requestMatchers("/", "/welcome", "/login", "/register", "/register-org", "/css/**", "/js/**", "/images/**").permitAll()
                 .anyRequest().authenticated()
