@@ -9,13 +9,13 @@ import org.springframework.context.annotation.PropertySource;
 import jakarta.annotation.PostConstruct;
 
 @Configuration
-@PropertySource("classpath:application-stripe.properties")
+@PropertySource(value = "classpath:application-stripe.properties", ignoreResourceNotFound = true)
 public class StripeConfig {
 
-    @Value("${stripe.api.secret-key}")
+    @Value("${stripe.api.secret-key:sk_test_placeholder}")
     private String stripeSecretKey;
     
-    @Value("${stripe.api.publishable-key}")
+    @Value("${stripe.api.publishable-key:pk_test_placeholder}")
     private String stripePublishableKey;
     
     @Value("${stripe.success.url:http://localhost:8080/payment/success}")
@@ -28,14 +28,19 @@ public class StripeConfig {
     private String baseUrl;
     
     @Value("${stripe.platform.fee.percentage:10}")
-    private int platformFeePercentage;
+    private long platformFeePercentage;
     
-    @Value("${stripe.connect.client.id:ca_}")
+    @Value("${stripe.connect.client.id:ca_placeholder}")
     private String connectClientId;
+
+    @Value("${stripe.webhook.secret:whsec_placeholder}")
+    private String webhookSecret;
 
     @PostConstruct
     public void init() {
         Stripe.apiKey = stripeSecretKey;
+        // Remove the API version setting as it might be causing compatibility issues
+        // Stripe.apiVersion = "2020-08-27"; 
     }
     
     public String getPublishableKey() {
@@ -58,11 +63,15 @@ public class StripeConfig {
         return baseUrl;
     }
     
-    public int getPlatformFeePercentage() {
+    public long getPlatformFeePercentage() {
         return platformFeePercentage;
     }
     
     public String getConnectClientId() {
         return connectClientId;
+    }
+    
+    public String getWebhookSecret() {
+        return webhookSecret;
     }
 }

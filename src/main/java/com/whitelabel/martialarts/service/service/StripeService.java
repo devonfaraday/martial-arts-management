@@ -100,6 +100,16 @@ public interface StripeService {
     Session retrieveConnectedAccountSession(String sessionId, String connectedAccountId) throws StripeException;
     
     /**
+     * Creates an embedded onboarding session for a school's Stripe Connect account
+     * 
+     * @param school The school to create an onboarding session for
+     * @param returnUrl The URL to redirect to after onboarding
+     * @return Map containing the URL for the onboarding session
+     * @throws StripeException If there's an error creating the session
+     */
+    Map<String, String> createOnboardingSession(School school, String returnUrl) throws StripeException;
+    
+    /**
      * Imports an existing Stripe Connect account into our system
      * 
      * @param school The school to associate with the account

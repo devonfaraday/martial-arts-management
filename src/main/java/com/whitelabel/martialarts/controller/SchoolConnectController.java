@@ -4,6 +4,7 @@ import com.stripe.exception.StripeException;
 import com.whitelabel.martialarts.model.School;
 import com.whitelabel.martialarts.repository.SchoolRepository;
 import com.whitelabel.martialarts.service.service.StripeService;
+import com.whitelabel.martialarts.config.StripeConfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,11 +28,17 @@ public class SchoolConnectController {
     @Autowired
     private SchoolRepository schoolRepository;
     
+    @Autowired
+    private StripeConfig stripeConfig;
+    
     @Value("${stripe.connect.client.id}")
     private String connectClientId;
     
     @Value("${stripe.connect.oauth.url}")
     private String connectOAuthUrl;
+    
+    @Value("${stripe.api.publishable-key}")
+    private String stripePublishableKey;
     
     /**
      * Displays the Stripe Connect onboarding page for a school
@@ -46,6 +53,19 @@ public class SchoolConnectController {
         model.addAttribute("oauthUrl", connectOAuthUrl);
         
         return "schools/connect/onboard";
+    }
+    
+    /**
+     * Displays the streamlined Stripe Connect onboarding page for a school
+     */
+    @GetMapping("/{schoolId}/embedded-onboard")
+    public String showStreamlinedOnboardingPage(@PathVariable Long schoolId, Model model) {
+        School school = schoolRepository.findById(schoolId)
+                .orElseThrow(() -> new IllegalArgumentException("School not found with ID: " + schoolId));
+        
+        model.addAttribute("school", school);
+        
+        return "schools/connect/embedded_onboard";
     }
     
     /**
@@ -69,6 +89,28 @@ public class SchoolConnectController {
         } catch (StripeException e) {
             redirectAttributes.addFlashAttribute("error", "Failed to create Stripe Connect account: " + e.getMessage());
             return "redirect:/schools/connect/" + schoolId + "/onboard";
+        }
+    }
+    
+    /**
+     * Creates an onboarding session for embedded onboarding
+     */
+    @PostMapping("/{schoolId}/create-session")
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> createOnboardingSession(@PathVariable Long schoolId) {
+        try {
+            School school = schoolRepository.findById(schoolId)
+                    .orElseThrow(() -> new IllegalArgumentException("School not found with ID: " + schoolId));
+            
+            String baseUrl = stripeConfig.getBaseUrl();
+            String returnUrl = baseUrl + "/schools/connect/" + schoolId + "/return";
+            Map<String, String> sessionData = stripeService.createOnboardingSession(school, returnUrl);
+            
+            return ResponseEntity.ok(sessionData);
+        } catch (Exception e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
     

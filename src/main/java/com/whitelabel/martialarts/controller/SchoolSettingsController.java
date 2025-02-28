@@ -158,7 +158,8 @@ public class SchoolSettingsController {
      * Refresh the Stripe Connect account status
      */
     @PostMapping("/refresh-stripe-account")
-    public String refreshStripeAccount(Principal principal, RedirectAttributes redirectAttributes) {
+    public String refreshStripeAccount(Principal principal, RedirectAttributes redirectAttributes, 
+                                  @RequestHeader(value = "Referer", required = false) String referer) {
         School school = getSchoolForCurrentUser(principal);
         
         if (school == null) {
@@ -179,12 +180,16 @@ public class SchoolSettingsController {
                 redirectAttributes.addFlashAttribute("warning", 
                         "Your Stripe account is not fully set up. Please complete the onboarding process.");
             }
-        } catch (StripeException e) {
+        } catch (Exception e) {
             logger.error("Failed to refresh Stripe account status: " + e.getMessage());
             redirectAttributes.addFlashAttribute("error", 
                     "Failed to refresh Stripe account status: " + e.getMessage());
         }
         
+        // Redirect back to the referring page if available, otherwise go to settings
+        if (referer != null && !referer.isEmpty()) {
+            return "redirect:" + referer;
+        }
         return "redirect:/school/settings";
     }
     
@@ -241,6 +246,20 @@ public class SchoolSettingsController {
         // In a real application, you would save these settings to the database
         redirectAttributes.addFlashAttribute("success", "Notification preferences saved successfully");
         return "redirect:/school/settings";
+    }
+    
+    /**
+     * Redirect to the streamlined Stripe onboarding page
+     */
+    @GetMapping("/streamlined-onboarding")
+    public String redirectToStreamlinedOnboarding(Principal principal) {
+        School school = getSchoolForCurrentUser(principal);
+        
+        if (school == null) {
+            return "redirect:/dashboard";
+        }
+        
+        return "redirect:/schools/connect/" + school.getId() + "/embedded-onboard";
     }
     
     /**

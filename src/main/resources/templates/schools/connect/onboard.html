@@ -90,6 +90,13 @@
                         <a th:href="${oauthUrl + '?response_type=code&client_id=' + clientId + '&scope=read_write&state=' + school.id}" class="btn btn-outline-primary">
                             Connect Existing Stripe Account
                         </a>
+                        
+                        <!-- Option 3: Embedded Onboarding -->
+                        <hr class="my-4">
+                        <p>Try our streamlined onboarding experience:</p>
+                        <a th:href="@{/schools/connect/{schoolId}/embedded-onboard(schoolId=${school.id})}" class="btn btn-outline-primary">
+                            Use Streamlined Onboarding
+                        </a>
                     </div>
                     
                     <div th:if="${school.stripeConnectAccountId && !school.stripeConnectEnabled}">

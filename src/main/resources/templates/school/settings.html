@@ -45,6 +45,12 @@
                                 School Settings
                             </a>
                         </li>
+                        <li class="nav-item" th:if="${school.stripeConnectAccountId != null && !school.stripeConnectEnabled}">
+                            <a class="nav-link text-white" href="/school/streamlined-onboarding">
+                                <i class="bi bi-stripe me-2"></i>
+                                Complete Stripe Setup
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -157,7 +163,30 @@
                                     </div>
                                 </div>
                                 
-                                <div th:unless="${school.stripeConnectEnabled}" class="mb-4">
+                                <div th:if="${school.stripeConnectAccountId && !school.stripeConnectEnabled}" class="mb-4">
+                                    <div class="alert alert-warning">
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                            <div>
+                                                <strong>Stripe Connect setup incomplete</strong>
+                                                <p class="mb-0">You need to complete the onboarding process to start accepting payments.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex gap-2 mb-4">
+                                        <a th:href="@{/schools/connect/{schoolId}/embedded-onboard(schoolId=${school.id})}" class="btn btn-primary">
+                                            <i class="bi bi-stripe me-2"></i>Complete Onboarding
+                                        </a>
+                                        <form th:action="@{/school/refresh-stripe-account}" method="post">
+                                            <button type="submit" class="btn btn-outline-secondary">
+                                                <i class="bi bi-arrow-clockwise me-2"></i>Refresh Status
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                
+                                <div th:unless="${school.stripeConnectAccountId}" class="mb-4">
                                     <div class="alert alert-warning">
                                         <div class="d-flex align-items-center">
                                             <i class="bi bi-exclamation-triangle-fill me-2"></i>
@@ -227,6 +256,26 @@
                                                                 <i class="bi bi-stripe me-2"></i>Import Stripe Account
                                                             </button>
                                                         </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="headingThree">
+                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                        Use streamlined onboarding
+                                                    </button>
+                                                </h2>
+                                                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#stripeOptionsAccordion">
+                                                    <div class="accordion-body">
+                                                        <p>Our streamlined onboarding process makes it easy to set up your Stripe account:</p>
+                                                        <ul class="mb-3">
+                                                            <li>Complete all required information in one place</li>
+                                                            <li>Faster verification process</li>
+                                                            <li>Secure and compliant setup</li>
+                                                        </ul>
+                                                        <a th:href="@{/schools/connect/{schoolId}/embedded-onboard(schoolId=${school.id})}" class="btn btn-primary">
+                                                            <i class="bi bi-stripe me-2"></i>Start Streamlined Onboarding
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
