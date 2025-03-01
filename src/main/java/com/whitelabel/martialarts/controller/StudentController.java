@@ -1,7 +1,7 @@
 package com.whitelabel.martialarts.controller;
 
 import com.whitelabel.martialarts.model.Address;
-import com.whitelabel.martialarts.model.BillingInfo;
+
 import com.whitelabel.martialarts.model.Note;
 import com.whitelabel.martialarts.model.School;
 import com.whitelabel.martialarts.model.Student;
@@ -80,9 +80,7 @@ public class StudentController {
         if (student.getHomeAddress() == null) {
             student.setHomeAddress(new Address());
         }
-        if (student.getBillingInfo() == null) {
-            student.setBillingInfo(new BillingInfo());
-        }
+
         model.addAttribute("student", student);
         model.addAttribute("statuses", StudentStatus.values());
         return "students/edit_student";
@@ -97,9 +95,7 @@ public class StudentController {
         if (student.getHomeAddress() != null) {
             existingStudent.setHomeAddress(student.getHomeAddress());
         }
-        if (student.getBillingInfo() != null) {
-            existingStudent.setBillingInfo(student.getBillingInfo());
-        }
+
 
         // Update all fields
         existingStudent.setFirstName(student.getFirstName());

@@ -113,11 +113,7 @@
                                 <input type="tel" id="phoneNumber" th:field="*{phoneNumber}"
                                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" />
                             </div>
-                            <div>
-                                <label for="homeAddress.street" class="block text-sm font-medium text-gray-700">Address</label>
-                                <input type="text" id="homeAddress.street" th:field="*{homeAddress.street}"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" />
-                            </div>
+
                         </div>
                     </section>
 
@@ -158,64 +154,6 @@
                         </div>
                     </section>
 
-                    <!-- Billing Information Section -->
-                    <section>
-                        <h2 class="text-lg font-semibold text-blue-600 mb-4">Billing Information</h2>
-                        <div class="grid grid-cols-2 gap-6">
-                            <div>
-                                <label for="billingInfo.cardNumber" class="block text-sm font-medium text-gray-700">Card
-                                    Number</label>
-                                <input type="text" id="billingInfo.cardNumber" th:field="*{billingInfo.cardNumber}"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" />
-                            </div>
-                            <div>
-                                <label for="billingInfo.cardHolderName"
-                                    class="block text-sm font-medium text-gray-700">Cardholder Name</label>
-                                <input type="text" id="billingInfo.cardHolderName"
-                                    th:field="*{billingInfo.cardHolderName}"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" />
-                            </div>
-                            <div>
-                                <label for="billingInfo.expirationDate"
-                                    class="block text-sm font-medium text-gray-700">Expiration Date</label>
-                                <input type="text" id="billingInfo.expirationDate"
-                                    th:field="*{billingInfo.expirationDate}" placeholder="MM/YY"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" />
-                            </div>
-                            <div>
-                                <label for="billingInfo.securityCode"
-                                    class="block text-sm font-medium text-gray-700">Security Code (CVV)</label>
-                                <input type="text" id="billingInfo.securityCode" th:field="*{billingInfo.securityCode}"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" />
-                            </div>
-                            <div>
-                                <label for="billingInfo.billingStreet"
-                                    class="block text-sm font-medium text-gray-700">Billing Street</label>
-                                <input type="text" id="billingInfo.billingStreet"
-                                    th:field="*{billingInfo.billingStreet}"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" />
-                            </div>
-                            <div>
-                                <label for="billingInfo.billingCity"
-                                    class="block text-sm font-medium text-gray-700">Billing City</label>
-                                <input type="text" id="billingInfo.billingCity" th:field="*{billingInfo.billingCity}"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" />
-                            </div>
-                            <div>
-                                <label for="billingInfo.billingState"
-                                    class="block text-sm font-medium text-gray-700">Billing State</label>
-                                <input type="text" id="billingInfo.billingState" th:field="*{billingInfo.billingState}"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" />
-                            </div>
-                            <div>
-                                <label for="billingInfo.billingZipCode"
-                                    class="block text-sm font-medium text-gray-700">Billing ZIP Code</label>
-                                <input type="text" id="billingInfo.billingZipCode"
-                                    th:field="*{billingInfo.billingZipCode}"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" />
-                            </div>
-                        </div>
-                    </section>
 
                     <!-- Emergency Contacts Section -->
                     <section>

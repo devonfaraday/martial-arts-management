@@ -130,6 +130,15 @@
                                 <h5 class="card-title mb-0">Stripe Connect Integration</h5>
                             </div>
                             <div class="card-body">
+                                <div th:if="${school.stripeConnectAccountId != null}" class="mt-4 p-4 bg-light rounded border">
+                                    <h5 class="mb-3">Stripe Account Verification</h5>
+                                    <p>If you've recently completed the Stripe onboarding process or if you're having issues with your Stripe account, click the button below to verify your account status.</p>
+                                    <form th:action="@{/school/refresh-stripe-account}" method="post">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="bi bi-stripe me-2"></i>Verify Stripe Account Status
+                                        </button>
+                                    </form>
+                                </div>
                                 <div th:if="${school.stripeConnectEnabled}" class="mb-4">
                                     <div class="alert alert-success">
                                         <div class="d-flex align-items-center">
@@ -152,7 +161,7 @@
                                     </div>
                                     
                                     <div class="d-flex gap-2">
-                                        <a href="https://dashboard.stripe.com" target="_blank" class="btn btn-outline-primary">
+                                        <a th:href="${'https://dashboard.stripe.com/connect/accounts/' + school.stripeConnectAccountId}" target="_blank" class="btn btn-outline-primary">
                                             <i class="bi bi-stripe me-2"></i>Go to Stripe Dashboard
                                         </a>
                                         <form th:action="@{/school/refresh-stripe-account}" method="post">
@@ -163,7 +172,7 @@
                                     </div>
                                 </div>
                                 
-                                <div th:if="${school.stripeConnectAccountId && !school.stripeConnectEnabled}" class="mb-4">
+                                <div th:if="${school.stripeConnectAccountId != null && !school.stripeConnectEnabled}" class="mb-4">
                                     <div class="alert alert-warning">
                                         <div class="d-flex align-items-center">
                                             <i class="bi bi-exclamation-triangle-fill me-2"></i>
@@ -217,7 +226,7 @@
                                                 </h2>
                                                 <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#stripeOptionsAccordion">
                                                     <div class="accordion-body">
-                                                        <form th:action="@{/school/connect-stripe}" method="post">
+                                                        <form th:action="@{/school/setup-stripe}" method="post">
                                                             <div class="form-check mb-3">
                                                                 <input class="form-check-input" type="checkbox" id="stripeTerms" required>
                                                                 <label class="form-check-label" for="stripeTerms">
@@ -342,6 +351,7 @@
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/stripe-settings.js}"></script>
     <script src="https://js.stripe.com/v3/"></script>
     <script th:inline="javascript">
         // Stripe publishable key

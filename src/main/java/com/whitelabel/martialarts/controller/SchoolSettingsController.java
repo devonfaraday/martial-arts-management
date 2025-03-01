@@ -1,6 +1,7 @@
 package com.whitelabel.martialarts.controller;
 
 import com.stripe.exception.StripeException;
+import com.stripe.model.Account;
 import com.whitelabel.martialarts.model.School;
 import com.whitelabel.martialarts.repository.SchoolRepository;
 import com.whitelabel.martialarts.service.service.StripeService;
@@ -89,10 +90,45 @@ public class SchoolSettingsController {
     }
     
     /**
-     * Initiate the Stripe Connect onboarding process
+     * Connect the school to Stripe
      */
     @PostMapping("/connect-stripe")
     public String connectStripe(Principal principal, RedirectAttributes redirectAttributes) {
+        School school = getSchoolForCurrentUser(principal);
+        
+        if (school == null) {
+            return "redirect:/dashboard";
+        }
+        
+        try {
+            // Create a new Stripe Connect account
+            String accountId = stripeService.createConnectAccount(school);
+            
+            // Generate an account link for onboarding
+            String returnUrl = baseUrl + "/schools/connect/" + school.getId() + "/return";
+            String accountLinkUrl = stripeService.createConnectAccountLink(school, returnUrl);
+            
+            // Redirect to the Stripe onboarding flow
+            return "redirect:" + accountLinkUrl;
+        } catch (StripeException e) {
+            redirectAttributes.addFlashAttribute("error", "Failed to create Stripe Connect account: " + e.getMessage());
+            return "redirect:/school/settings";
+        }
+    }
+    
+    /**
+     * Alias for connect-stripe to handle the form submission from settings.html
+     */
+    @PostMapping("/setup-stripe")
+    public String setupStripe(Principal principal, RedirectAttributes redirectAttributes) {
+        return connectStripe(principal, redirectAttributes);
+    }
+    
+    /**
+     * Initiate the Stripe Connect onboarding process
+     */
+    @PostMapping("/connect-stripe-onboard")
+    public String connectStripeOnboard(Principal principal, RedirectAttributes redirectAttributes) {
         try {
             School school = getSchoolForCurrentUser(principal);
             
@@ -155,41 +191,65 @@ public class SchoolSettingsController {
     }
     
     /**
-     * Refresh the Stripe Connect account status
+     * Refresh the Stripe account status and redirect to onboarding if needed
      */
     @PostMapping("/refresh-stripe-account")
-    public String refreshStripeAccount(Principal principal, RedirectAttributes redirectAttributes, 
-                                  @RequestHeader(value = "Referer", required = false) String referer) {
+    public String refreshStripeAccount(Principal principal, RedirectAttributes redirectAttributes) {
         School school = getSchoolForCurrentUser(principal);
         
         if (school == null) {
-            redirectAttributes.addFlashAttribute("error", "School not found");
             return "redirect:/dashboard";
         }
         
+        if (school.getStripeConnectAccountId() == null) {
+            redirectAttributes.addFlashAttribute("error", "No Stripe account is connected.");
+            return "redirect:/school/settings";
+        }
+        
         try {
+            // Get the detailed account information
+            Account account = Account.retrieve(school.getStripeConnectAccountId());
             boolean isEnabled = stripeService.isConnectAccountEnabled(school);
             
             if (isEnabled) {
-                school.setStripeConnectEnabled(true);
-                schoolRepository.save(school);
-                redirectAttributes.addFlashAttribute("success", "Stripe account status refreshed successfully");
+                redirectAttributes.addFlashAttribute("success", "Your Stripe account is fully set up and ready to accept payments!");
             } else {
-                school.setStripeConnectEnabled(false);
-                schoolRepository.save(school);
-                redirectAttributes.addFlashAttribute("warning", 
-                        "Your Stripe account is not fully set up. Please complete the onboarding process.");
+                // Provide detailed information about what's missing
+                StringBuilder warningMessage = new StringBuilder("Your Stripe account setup is not complete. ");
+                
+                if (!account.getDetailsSubmitted()) {
+                    warningMessage.append("Business information has not been submitted. ");
+                }
+                
+                if (!account.getChargesEnabled()) {
+                    warningMessage.append("Charges are not enabled. ");
+                }
+                
+                if (!account.getPayoutsEnabled()) {
+                    warningMessage.append("Payouts are not enabled. ");
+                }
+                
+                Account.Requirements requirements = account.getRequirements();
+                if (requirements != null && requirements.getCurrentlyDue() != null && !requirements.getCurrentlyDue().isEmpty()) {
+                    warningMessage.append("There are requirements that need to be addressed: ");
+                    warningMessage.append(String.join(", ", requirements.getCurrentlyDue()));
+                    warningMessage.append(". ");
+                }
+                
+                warningMessage.append("Please complete the onboarding process to accept payments.");
+                redirectAttributes.addFlashAttribute("warning", warningMessage.toString());
+                
+                // Generate a fresh onboarding link
+                String returnUrl = baseUrl + "/schools/connect/" + school.getId() + "/return";
+                String accountLinkUrl = stripeService.createConnectAccountLink(school, returnUrl);
+                
+                // Redirect to the Stripe onboarding flow
+                return "redirect:" + accountLinkUrl;
             }
-        } catch (Exception e) {
-            logger.error("Failed to refresh Stripe account status: " + e.getMessage());
-            redirectAttributes.addFlashAttribute("error", 
-                    "Failed to refresh Stripe account status: " + e.getMessage());
+        } catch (StripeException e) {
+            redirectAttributes.addFlashAttribute("error", "Error checking Stripe account status: " + e.getMessage());
         }
         
-        // Redirect back to the referring page if available, otherwise go to settings
-        if (referer != null && !referer.isEmpty()) {
-            return "redirect:" + referer;
-        }
         return "redirect:/school/settings";
     }
     

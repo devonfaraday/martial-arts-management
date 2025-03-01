@@ -44,9 +44,7 @@ public class Student {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Note> notes = new ArrayList<>();
 
-    // Billing Info
-    @Embedded
-    private BillingInfo billingInfo;
+    // Billing is handled through Stripe
 
     // Emergency Contacts
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -140,13 +138,6 @@ public class Student {
         this.school = school;
     }
 
-    public BillingInfo getBillingInfo() {
-        return billingInfo;
-    }
-
-    public void setBillingInfo(BillingInfo billingInfo) {
-        this.billingInfo = billingInfo;
-    }
 
     public List<EmergencyContact> getEmergencyContacts() {
         return emergencyContacts;

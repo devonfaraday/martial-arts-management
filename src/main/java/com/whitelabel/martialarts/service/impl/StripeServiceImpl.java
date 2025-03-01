@@ -267,11 +267,26 @@ public class StripeServiceImpl implements StripeService {
             // Check if the account is fully onboarded and enabled
             boolean chargesEnabled = account.getChargesEnabled();
             boolean payoutsEnabled = account.getPayoutsEnabled();
+            boolean detailsSubmitted = account.getDetailsSubmitted();
             
-            logger.debug("Stripe account status for school {}: charges enabled = {}, payouts enabled = {}", 
-                        school.getId(), chargesEnabled, payoutsEnabled);
+            // Check if there are any requirements that need to be addressed
+            Account.Requirements requirements = account.getRequirements();
+            boolean hasCurrentlyDueRequirements = requirements != null && 
+                (requirements.getCurrentlyDue() != null && !requirements.getCurrentlyDue().isEmpty());
             
-            return chargesEnabled && payoutsEnabled;
+            logger.debug("Stripe account status for school {}: charges enabled = {}, payouts enabled = {}, details submitted = {}, has requirements = {}", 
+                        school.getId(), chargesEnabled, payoutsEnabled, detailsSubmitted, hasCurrentlyDueRequirements);
+            
+            // Account is only considered fully enabled if all conditions are met
+            boolean isEnabled = chargesEnabled && payoutsEnabled && detailsSubmitted && !hasCurrentlyDueRequirements;
+            
+            // Update the school's status in the database
+            if (school.isStripeConnectEnabled() != isEnabled) {
+                school.setStripeConnectEnabled(isEnabled);
+                schoolRepository.save(school);
+            }
+            
+            return isEnabled;
         } catch (StripeException e) {
             logger.error("Error checking Stripe Connect account status for school {}: {}", 
                         school.getId(), e.getMessage());

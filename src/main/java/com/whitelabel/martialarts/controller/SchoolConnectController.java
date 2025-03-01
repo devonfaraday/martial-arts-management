@@ -81,7 +81,7 @@ public class SchoolConnectController {
             String accountId = stripeService.createConnectAccount(school);
             
             // Generate an account link for onboarding
-            String returnUrl = "/schools/connect/" + schoolId + "/return";
+            String returnUrl = stripeConfig.getBaseUrl() + "/schools/connect/" + schoolId + "/return";
             String accountLinkUrl = stripeService.createConnectAccountLink(school, returnUrl);
             
             // Redirect to the Stripe onboarding flow
@@ -124,7 +124,7 @@ public class SchoolConnectController {
         try {
             School school = stripeService.handleConnectOAuthCallback(code, Long.parseLong(schoolId));
             redirectAttributes.addFlashAttribute("success", "Successfully connected Stripe account for " + school.getName());
-            return "redirect:/schools/" + schoolId;
+            return "redirect:/dashboard";
         } catch (StripeException e) {
             redirectAttributes.addFlashAttribute("error", "Failed to connect Stripe account: " + e.getMessage());
             return "redirect:/schools/connect/" + schoolId + "/onboard";
@@ -152,7 +152,7 @@ public class SchoolConnectController {
             redirectAttributes.addFlashAttribute("error", "Failed to verify Stripe account status: " + e.getMessage());
         }
         
-        return "redirect:/schools/" + schoolId;
+        return "redirect:/dashboard";
     }
     
     /**
