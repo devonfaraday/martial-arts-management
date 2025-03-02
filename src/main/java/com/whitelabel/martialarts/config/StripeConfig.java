@@ -9,7 +9,6 @@ import org.springframework.context.annotation.PropertySource;
 import jakarta.annotation.PostConstruct;
 
 @Configuration
-@PropertySource("classpath:application-stripe.properties")
 public class StripeConfig {
 
     @Value("${stripe.api.secret-key}")
