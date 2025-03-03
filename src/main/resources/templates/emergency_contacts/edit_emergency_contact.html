@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Emergency Contact</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Edit Emergency Contact</h2>
+            <a th:href="@{/emergency-contacts}" class="btn btn-secondary">Back to List</a>
+        </div>
+
+        <form th:action="@{/emergency-contacts/edit/{id}(id=${emergencyContact.id})}" 
+              th:object="${emergencyContact}" method="post" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                <div class="invalid-feedback">Please enter a name.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="relationship" class="form-label">Relationship</label>
+                <input type="text" class="form-control" id="relationship" th:field="*{relationship}" required>
+                <div class="invalid-feedback">Please enter the relationship.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="phoneNumber" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" id="phoneNumber" th:field="*{phoneNumber}" 
+                       pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+                <div class="form-text">Format: XXX-XXX-XXXX</div>
+                <div class="invalid-feedback">Please enter a valid phone number in the format XXX-XXX-XXXX.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" th:field="*{email}" required>
+                <div class="invalid-feedback">Please enter a valid email address.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="studentId" class="form-label">Student</label>
+                <select class="form-select" id="studentId" th:field="*{student}" required>
+                    <option value="">Select a student</option>
+                    <option th:each="student : ${students}"
+                            th:value="${student.id}"
+                            th:text="${student.firstName + ' ' + student.lastName}">
+                    </option>
+                </select>
+                <div class="invalid-feedback">Please select a student.</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a th:href="@{/emergency-contacts}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Phone number formatting
+        document.getElementById('phoneNumber').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '').substring(0,10);
+            let formattedValue = '';
+            
+            if (value.length > 0) {
+                formattedValue = value.substring(0,3);
+                if (value.length > 3) {
+                    formattedValue += '-' + value.substring(3,6);
+                }
+                if (value.length > 6) {
+                    formattedValue += '-' + value.substring(6);
+                }
+            }
+            
+            e.target.value = formattedValue;
+        });
+
+        // Form validation
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+</body>
+</html>
