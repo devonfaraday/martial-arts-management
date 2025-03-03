@@ -17,7 +17,7 @@ public class WebSecurityConfig {
         http
             .csrf(csrf -> csrf.ignoringRequestMatchers("/stripe-webhook/**"))
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/", "/welcome", "/login", "/register", "/register-org", "/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers("/", "/welcome", "/login", "/register", "/register-org", "/css/**", "/js/**", "/images/**", "/emergency-contacts/**").permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form

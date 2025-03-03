@@ -220,6 +220,17 @@
                     <!-- Emergency Contacts Section -->
                     <section>
                         <h2 class="text-lg font-semibold text-blue-600 mb-4">Emergency Contacts</h2>
+                        <div class="mb-4">
+                            <a th:href="@{/emergency-contacts/add?studentId={id}(id=${student.id})}" class="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition duration-300 inline-flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                </svg>
+                                Add Emergency Contact
+                            </a>
+                            <a th:href="@{/emergency-contacts}" class="ml-4 text-blue-600 hover:text-blue-800 transition duration-300 inline-flex items-center">
+                                View All Emergency Contacts
+                            </a>
+                        </div>
                         <div th:each="contact, iterStat : ${student.emergencyContacts}" class="mb-6">
                             <h3 class="text-md font-medium text-gray-700 mb-4">Contact <span th:text="${iterStat.index + 1}">1</span>:</h3>
                             <div class="grid grid-cols-2 gap-6">

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Emergency Contact</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Emergency Contact Details</h2>
+            <a th:href="@{/emergency-contacts}" class="btn btn-secondary">Back to List</a>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Name:</div>
+                    <div class="col-md-9" th:text="${emergencyContact.name}"></div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Relationship:</div>
+                    <div class="col-md-9" th:text="${emergencyContact.relationship}"></div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Phone Number:</div>
+                    <div class="col-md-9" th:text="${emergencyContact.phoneNumber}"></div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Email:</div>
+                    <div class="col-md-9" th:text="${emergencyContact.email}"></div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-3 fw-bold">Student:</div>
+                    <div class="col-md-9" th:text="${emergencyContact.student != null ? emergencyContact.student.firstName + ' ' + emergencyContact.student.lastName : ''}"></div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="btn-group" role="group">
+                    <a th:href="@{/emergency-contacts/edit/{id}(id=${emergencyContact.id})}" 
+                       class="btn btn-warning">Edit</a>
+                    <form th:action="@{/emergency-contacts/delete/{id}(id=${emergencyContact.id})}" 
+                          method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-danger" 
+                                onclick="return confirm('Are you sure you want to delete this contact?')">
+                            Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
