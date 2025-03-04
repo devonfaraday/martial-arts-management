@@ -122,6 +122,18 @@ public class StudentController {
         studentService.deleteStudent(id);
         return "redirect:/students";
     }
+    
+    @GetMapping("/{id}/confirm-delete")
+    public String confirmDeleteStudent(@PathVariable Long id, Model model) {
+        model.addAttribute("studentId", id);
+        return "students/fragments/delete_confirmation :: confirmDelete";
+    }
+    
+    @GetMapping("/cancel-delete")
+    public String cancelDelete() {
+        // Return empty string to clear the modal
+        return "";
+    }
 
     // // New endpoint: Show form to add a note for a student
     // @GetMapping("/{id}/notes/add")
