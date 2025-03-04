@@ -217,9 +217,12 @@
                                 </svg>
                                 Save Changes
                             </button>
-                            <a th:href="@{/students/delete/{id}(id=${student.id})}"
+                            <button type="button"
                                 class="bg-red-600 text-white px-6 py-2 rounded-lg shadow hover:bg-red-700 transition duration-300 flex items-center"
-                                onclick="return confirm('Are you sure you want to delete this student?');">
+                                th:hx-get="@{/students/{id}/confirm-delete(id=${student.id})}"
+                                hx-target="#modalContainer"
+                                hx-swap="innerHTML"
+                                th:hx-headers="${_csrf != null ? '{'''+_csrf.headerName+''': '''+_csrf.token+'''}' : '{}'}">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
                                     fill="currentColor">
                                     <path fill-rule="evenodd"
@@ -227,7 +230,7 @@
                                         clip-rule="evenodd" />
                                 </svg>
                                 Delete
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -293,6 +296,9 @@
             </div>
 
         </main>
+
+        <!-- Modal Container for HTMX to swap content into -->
+        <div id="modalContainer"></div>
     </body>
 
 </html>
