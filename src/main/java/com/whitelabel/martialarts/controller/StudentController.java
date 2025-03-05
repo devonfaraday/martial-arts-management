@@ -119,20 +119,39 @@ public class StudentController {
 
     @GetMapping("/delete/{id}")
     public String deleteStudent(@PathVariable Long id) {
-        studentService.deleteStudent(id);
-        return "redirect:/students";
+        Student student = studentService.getStudentById(id);
+        boolean canDelete = student.getStatus() == StudentStatus.PROSPECT || 
+                           student.getStatus() == StudentStatus.CANCELED;
+        
+        if (canDelete) {
+            studentService.deleteStudent(id);
+            return "redirect:/students";
+        } else {
+            return "redirect:/students/edit/" + id + "?error=cannot_delete_active";
+        }
     }
     
     @GetMapping("/{id}/confirm-delete")
     public String confirmDeleteStudent(@PathVariable Long id, Model model) {
+        Student student = studentService.getStudentById(id);
+        boolean canDelete = student.getStatus() == StudentStatus.PROSPECT || 
+                           student.getStatus() == StudentStatus.CANCELED;
+        
         model.addAttribute("studentId", id);
-        return "students/fragments/delete_confirmation :: confirmDelete";
+        model.addAttribute("student", student);
+        model.addAttribute("canDelete", canDelete);
+        
+        if (canDelete) {
+            return "students/fragments/delete_confirmation :: confirmDelete";
+        } else {
+            return "students/fragments/delete_error :: deleteError";
+        }
     }
     
     @GetMapping("/cancel-delete")
     public String cancelDelete() {
         // Return empty string to clear the modal
-        return "";
+        return "students/fragments/empty :: empty";
     }
 
     // // New endpoint: Show form to add a note for a student
