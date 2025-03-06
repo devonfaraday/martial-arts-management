@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.whitelabel.martialarts.model.Address;
-import com.whitelabel.martialarts.model.BillingInfo;
 import com.whitelabel.martialarts.model.EmergencyContact;
 import com.whitelabel.martialarts.model.Note;
 import com.whitelabel.martialarts.model.School;
@@ -93,9 +92,6 @@ public class StudentController {
         if (student.getHomeAddress() == null) {
             student.setHomeAddress(new Address());
         }
-        if (student.getBillingInfo() == null) {
-            student.setBillingInfo(new BillingInfo());
-        }
         
         // Get emergency contacts for this student
         List<EmergencyContact> emergencyContacts = emergencyContactService.findByStudentId(id);
@@ -115,9 +111,7 @@ public class StudentController {
         if (student.getHomeAddress() != null) {
             existingStudent.setHomeAddress(student.getHomeAddress());
         }
-        if (student.getBillingInfo() != null) {
-            existingStudent.setBillingInfo(student.getBillingInfo());
-        }
+
 
         // Update all fields
         existingStudent.setFirstName(student.getFirstName());
@@ -143,6 +137,18 @@ public class StudentController {
     public String deleteStudent(@PathVariable Long id) {
         studentService.deleteStudent(id);
         return "redirect:/students";
+    }
+    
+    @GetMapping("/{id}/confirm-delete")
+    public String confirmDeleteStudent(@PathVariable Long id, Model model) {
+        model.addAttribute("studentId", id);
+        return "students/fragments/delete_confirmation :: confirmDelete";
+    }
+    
+    @GetMapping("/cancel-delete")
+    public String cancelDelete() {
+        // Return empty string to clear the modal
+        return "";
     }
 
     // // New endpoint: Show form to add a note for a student

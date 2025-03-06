@@ -57,12 +57,22 @@
                     <p>You can accept payments from students and manage your finances.</p>
                 </div>
                 
-                <div th:unless="${school.stripeConnectEnabled}" class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
+                <div th:if="${school != null && school.id != null && !school.stripeConnectEnabled}" class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
                     <p class="font-semibold">Stripe Connect is not set up for your school.</p>
                     <p>You need to set up Stripe Connect to accept payments from students.</p>
-                    <a th:href="@{/school/settings}" class="inline-block mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Set Up Payment Processing
-                    </a>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                        <a th:if="${school.stripeConnectAccountId != null}" th:href="@{/school/streamlined-onboarding}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Complete Stripe Setup
+                        </a>
+                        <a th:href="@{/school/settings}" class="inline-block bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                            Payment Settings
+                        </a>
+                        <form th:action="@{/school/refresh-stripe-account}" method="post" class="inline">
+                            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                Refresh Status
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

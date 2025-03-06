@@ -113,11 +113,7 @@
                                 <input type="tel" id="phoneNumber" th:field="*{phoneNumber}"
                                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" />
                             </div>
-                            <div>
-                                <label for="homeAddress.street" class="block text-sm font-medium text-gray-700">Address</label>
-                                <input type="text" id="homeAddress.street" th:field="*{homeAddress.street}"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" />
-                            </div>
+
                         </div>
                     </section>
 
@@ -158,64 +154,6 @@
                         </div>
                     </section>
 
-                    <!-- Billing Information Section -->
-                    <section>
-                        <h2 class="text-lg font-semibold text-blue-600 mb-4">Billing Information</h2>
-                        <div class="grid grid-cols-2 gap-6">
-                            <div>
-                                <label for="billingInfo.cardNumber" class="block text-sm font-medium text-gray-700">Card
-                                    Number</label>
-                                <input type="text" id="billingInfo.cardNumber" th:field="*{billingInfo.cardNumber}"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" />
-                            </div>
-                            <div>
-                                <label for="billingInfo.cardHolderName"
-                                    class="block text-sm font-medium text-gray-700">Cardholder Name</label>
-                                <input type="text" id="billingInfo.cardHolderName"
-                                    th:field="*{billingInfo.cardHolderName}"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" />
-                            </div>
-                            <div>
-                                <label for="billingInfo.expirationDate"
-                                    class="block text-sm font-medium text-gray-700">Expiration Date</label>
-                                <input type="text" id="billingInfo.expirationDate"
-                                    th:field="*{billingInfo.expirationDate}" placeholder="MM/YY"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" />
-                            </div>
-                            <div>
-                                <label for="billingInfo.securityCode"
-                                    class="block text-sm font-medium text-gray-700">Security Code (CVV)</label>
-                                <input type="text" id="billingInfo.securityCode" th:field="*{billingInfo.securityCode}"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" />
-                            </div>
-                            <div>
-                                <label for="billingInfo.billingStreet"
-                                    class="block text-sm font-medium text-gray-700">Billing Street</label>
-                                <input type="text" id="billingInfo.billingStreet"
-                                    th:field="*{billingInfo.billingStreet}"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" />
-                            </div>
-                            <div>
-                                <label for="billingInfo.billingCity"
-                                    class="block text-sm font-medium text-gray-700">Billing City</label>
-                                <input type="text" id="billingInfo.billingCity" th:field="*{billingInfo.billingCity}"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" />
-                            </div>
-                            <div>
-                                <label for="billingInfo.billingState"
-                                    class="block text-sm font-medium text-gray-700">Billing State</label>
-                                <input type="text" id="billingInfo.billingState" th:field="*{billingInfo.billingState}"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" />
-                            </div>
-                            <div>
-                                <label for="billingInfo.billingZipCode"
-                                    class="block text-sm font-medium text-gray-700">Billing ZIP Code</label>
-                                <input type="text" id="billingInfo.billingZipCode"
-                                    th:field="*{billingInfo.billingZipCode}"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" />
-                            </div>
-                        </div>
-                    </section>
 
                     <!-- Emergency Contacts Section -->
                     <section>
@@ -240,14 +178,15 @@
                                                 <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                                             </svg>
                                         </a>
-                                        <form th:action="@{/emergency-contacts/delete/{id}(id=${contact.id})}" method="post" class="inline">
-                                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                                            <button type="submit" class="text-red-600 hover:text-red-800" onclick="return confirm('Are you sure you want to delete this contact?')">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <button type="button" class="text-red-600 hover:text-red-800"
+                                            th:hx-get="@{/emergency-contacts/{id}/confirm-delete(id=${contact.id})}"
+                                            hx-target="#modalContainer"
+                                            hx-swap="innerHTML"
+                                            th:hx-headers="${_csrf != null ? '{'''+_csrf.headerName+''': '''+_csrf.token+'''}' : '{}'}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                                     <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                                                 </svg>
                                             </button>
-                                        </form>
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-4 text-sm">
@@ -303,9 +242,12 @@
                                 </svg>
                                 Save Changes
                             </button>
-                            <a th:href="@{/students/delete/{id}(id=${student.id})}"
+                            <button type="button"
                                 class="bg-red-600 text-white px-6 py-2 rounded-lg shadow hover:bg-red-700 transition duration-300 flex items-center"
-                                onclick="return confirm('Are you sure you want to delete this student?');">
+                                th:hx-get="@{/students/{id}/confirm-delete(id=${student.id})}"
+                                hx-target="#modalContainer"
+                                hx-swap="innerHTML"
+                                th:hx-headers="${_csrf != null ? '{'''+_csrf.headerName+''': '''+_csrf.token+'''}' : '{}'}">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
                                     fill="currentColor">
                                     <path fill-rule="evenodd"
@@ -313,7 +255,7 @@
                                         clip-rule="evenodd" />
                                 </svg>
                                 Delete
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -379,6 +321,9 @@
             </div>
 
         </main>
+
+        <!-- Modal Container for HTMX to swap content into -->
+        <div id="modalContainer"></div>
     </body>
 
 </html>

@@ -88,7 +88,21 @@ public class EmergencyContactController {
         return "redirect:/students/edit/" + existingContact.getStudent().getId();
     }
 
-    @PostMapping("/delete/{id}")
+    @GetMapping("/{id}/confirm-delete")
+    public String confirmDeleteEmergencyContact(@PathVariable Long id, Model model) {
+        EmergencyContact contact = emergencyContactService.findById(id);
+        model.addAttribute("contactId", id);
+        model.addAttribute("studentId", contact.getStudent().getId());
+        return "emergency_contacts/fragments/delete_confirmation :: confirmDelete";
+    }
+    
+    @GetMapping("/cancel-delete")
+    public String cancelDelete() {
+        // Return empty string to clear the modal
+        return "";
+    }
+    
+    @GetMapping("/delete/{id}")
     public String deleteEmergencyContact(@PathVariable Long id) {
         EmergencyContact contact = emergencyContactService.findById(id);
         Long studentId = contact.getStudent().getId();
