@@ -1,11 +1,12 @@
 package com.whitelabel.martialarts.service;
 
-import com.whitelabel.martialarts.model.EmergencyContact;
-import com.whitelabel.martialarts.repository.EmergencyContactRepository;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.whitelabel.martialarts.model.EmergencyContact;
+import com.whitelabel.martialarts.repository.EmergencyContactRepository;
 
 @Service
 public class EmergencyContactService {
@@ -23,6 +24,10 @@ public class EmergencyContactService {
 
     public List<EmergencyContact> findAll() {
         return emergencyContactRepository.findAll();
+    }
+    
+    public List<EmergencyContact> findByStudentId(Long studentId) {
+        return emergencyContactRepository.findByStudentId(studentId);
     }
 
     public EmergencyContact findById(Long id) {

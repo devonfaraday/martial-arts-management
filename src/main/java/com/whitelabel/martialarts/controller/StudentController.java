@@ -1,26 +1,36 @@
 package com.whitelabel.martialarts.controller;
 
-import com.whitelabel.martialarts.model.Address;
-import com.whitelabel.martialarts.model.BillingInfo;
-import com.whitelabel.martialarts.model.Note;
-import com.whitelabel.martialarts.model.School;
-import com.whitelabel.martialarts.model.Student;
-import com.whitelabel.martialarts.model.StudentStatus;
-import com.whitelabel.martialarts.repository.SchoolRepository;
-import com.whitelabel.martialarts.service.service.NoteService;
-import com.whitelabel.martialarts.service.service.StudentService;
+import java.util.List;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.util.List;
-
-import org.slf4j.Logger;
+import com.whitelabel.martialarts.model.Address;
+import com.whitelabel.martialarts.model.BillingInfo;
+import com.whitelabel.martialarts.model.EmergencyContact;
+import com.whitelabel.martialarts.model.Note;
+import com.whitelabel.martialarts.model.School;
+import com.whitelabel.martialarts.model.Student;
+import com.whitelabel.martialarts.model.StudentStatus;
+import com.whitelabel.martialarts.repository.SchoolRepository;
+import com.whitelabel.martialarts.service.EmergencyContactService;
+import com.whitelabel.martialarts.service.service.NoteService;
+import com.whitelabel.martialarts.service.service.StudentService;
 
 @Controller
 @RequestMapping("/students")
@@ -34,6 +44,9 @@ public class StudentController {
     
     @Autowired
     private SchoolRepository schoolRepository;
+    
+    @Autowired
+    private EmergencyContactService emergencyContactService;
 
     private static final Logger log = LoggerFactory.getLogger(StudentController.class);
 
@@ -83,7 +96,12 @@ public class StudentController {
         if (student.getBillingInfo() == null) {
             student.setBillingInfo(new BillingInfo());
         }
+        
+        // Get emergency contacts for this student
+        List<EmergencyContact> emergencyContacts = emergencyContactService.findByStudentId(id);
+        
         model.addAttribute("student", student);
+        model.addAttribute("emergencyContacts", emergencyContacts);
         model.addAttribute("statuses", StudentStatus.values());
         return "students/edit_student";
     }

@@ -1,14 +1,20 @@
 package com.whitelabel.martialarts.controller;
 
-import com.whitelabel.martialarts.model.EmergencyContact;
-import com.whitelabel.martialarts.service.EmergencyContactService;
-import com.whitelabel.martialarts.service.StudentService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
+import com.whitelabel.martialarts.model.EmergencyContact;
+import com.whitelabel.martialarts.service.EmergencyContactService;
+import com.whitelabel.martialarts.service.StudentService;
 
 @Controller
 @RequestMapping("/emergency-contacts")
@@ -41,7 +47,10 @@ public class EmergencyContactController {
         // If studentId is provided, pre-select the student
         if (studentId != null) {
             try {
-                emergencyContact.setStudent(studentService.getStudentById(studentId));
+                com.whitelabel.martialarts.model.Student student = studentService.getStudentById(studentId);
+                emergencyContact.setStudent(student);
+                model.addAttribute("studentId", studentId);
+                model.addAttribute("studentName", student.getFirstName() + " " + student.getLastName());
             } catch (Exception e) {
                 // If student not found, continue without pre-selection
             }
@@ -49,14 +58,13 @@ public class EmergencyContactController {
         
         model.addAttribute("emergencyContact", emergencyContact);
         model.addAttribute("students", studentService.getAllStudents());
-        model.addAttribute("preSelectedStudentId", studentId);
         return "emergency_contacts/add_emergency_contact";
     }
 
     @PostMapping
     public String createEmergencyContact(@ModelAttribute EmergencyContact emergencyContact) {
         emergencyContactService.save(emergencyContact);
-        return "redirect:/emergency-contacts";
+        return "redirect:/students/edit/" + emergencyContact.getStudent().getId();
     }
 
     @GetMapping("/edit/{id}")
@@ -68,14 +76,24 @@ public class EmergencyContactController {
 
     @PostMapping("/edit/{id}")
     public String updateEmergencyContact(@PathVariable Long id, @ModelAttribute EmergencyContact emergencyContact) {
-        emergencyContact.setId(id);
-        emergencyContactService.save(emergencyContact);
-        return "redirect:/emergency-contacts";
+        EmergencyContact existingContact = emergencyContactService.findById(id);
+        
+        // Update fields but keep the same student
+        existingContact.setName(emergencyContact.getName());
+        existingContact.setRelationship(emergencyContact.getRelationship());
+        existingContact.setPhoneNumber(emergencyContact.getPhoneNumber());
+        existingContact.setEmail(emergencyContact.getEmail());
+        
+        emergencyContactService.save(existingContact);
+        return "redirect:/students/edit/" + existingContact.getStudent().getId();
     }
 
     @PostMapping("/delete/{id}")
     public String deleteEmergencyContact(@PathVariable Long id) {
+        EmergencyContact contact = emergencyContactService.findById(id);
+        Long studentId = contact.getStudent().getId();
+        
         emergencyContactService.deleteById(id);
-        return "redirect:/emergency-contacts";
+        return "redirect:/students/edit/" + studentId;
     }
 }
