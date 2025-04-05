@@ -29,7 +29,9 @@ import com.whitelabel.martialarts.model.StudentStatus;
 import com.whitelabel.martialarts.repository.SchoolRepository;
 import com.whitelabel.martialarts.service.EmergencyContactService;
 import com.whitelabel.martialarts.service.service.NoteService;
+import com.whitelabel.martialarts.service.service.RankService;
 import com.whitelabel.martialarts.service.service.StudentService;
+import com.whitelabel.martialarts.model.Rank;
 
 @Controller
 @RequestMapping("/students")
@@ -46,6 +48,9 @@ public class StudentController {
     
     @Autowired
     private EmergencyContactService emergencyContactService;
+    
+    @Autowired
+    private RankService rankService;
 
     private static final Logger log = LoggerFactory.getLogger(StudentController.class);
 
@@ -96,9 +101,13 @@ public class StudentController {
         // Get emergency contacts for this student
         List<EmergencyContact> emergencyContacts = emergencyContactService.findByStudentId(id);
         
+        // Get all ranks for the rank dropdown
+        List<Rank> ranks = rankService.getAllRanks();
+        
         model.addAttribute("student", student);
         model.addAttribute("emergencyContacts", emergencyContacts);
         model.addAttribute("statuses", StudentStatus.values());
+        model.addAttribute("ranks", ranks);
         return "students/edit_student";
     }
 
@@ -127,8 +136,17 @@ public class StudentController {
         }
 
         Student updatedStudent = studentService.updateStudent(id, existingStudent);
+        
+        // Get all ranks for the rank dropdown
+        List<Rank> ranks = rankService.getAllRanks();
+        
+        // Get emergency contacts for this student
+        List<EmergencyContact> emergencyContacts = emergencyContactService.findByStudentId(id);
+        
         model.addAttribute("student", updatedStudent);
+        model.addAttribute("emergencyContacts", emergencyContacts);
         model.addAttribute("statuses", StudentStatus.values());
+        model.addAttribute("ranks", ranks);
 
         return "students/edit_student";
     }
@@ -177,6 +195,43 @@ public String createNote(@PathVariable Long id,
     model.addAttribute("student", student);
     return "students/edit_student :: notes-container";
 }
+
+    // Rank Modal Fragment
+    @GetMapping("/{id}/rank-modal")
+    public String showRankModal(@PathVariable Long id, Model model) {
+        Student student = studentService.getStudentById(id);
+        model.addAttribute("student", student);
+        return "students/fragments/rank_modal :: rankModalContent";
+    }
+    
+    // Stripe Preview Fragment
+    @GetMapping("/{id}/stripe-preview")
+    public String showStripePreview(
+            @PathVariable Long id,
+            @RequestParam(value = "rankId", required = false) Long rankId,
+            @RequestParam(value = "stripes", defaultValue = "0") Integer stripes,
+            Model model) {
+        
+        Student student = studentService.getStudentById(id);
+        model.addAttribute("student", student);
+        model.addAttribute("currentStripes", stripes);
+        
+        // If rankId is provided, get the max stripes for that rank
+        if (rankId != null) {
+            try {
+                Rank rank = rankService.getRankById(rankId);
+                model.addAttribute("selectedRank", rank);
+                // Ensure stripes doesn't exceed max for the rank
+                if (rank.getMaxStripes() != null && stripes > rank.getMaxStripes()) {
+                    model.addAttribute("currentStripes", rank.getMaxStripes());
+                }
+            } catch (Exception e) {
+                log.error("Error fetching rank: {}", e.getMessage());
+            }
+        }
+        
+        return "students/fragments/stripe_preview :: stripePreview";
+    }
 
 
     // New endpoint: Delete a specific note by its ID

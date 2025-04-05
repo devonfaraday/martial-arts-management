@@ -34,7 +34,39 @@
                     </div>
                     <h5 class="text-lg font-semibold text-gray-800 mb-4"
                         th:text="${student.firstName} + ' ' + ${student.lastName}"></h5>
-                    <h1>Rank with last promotion date</h1>
+                    
+                    <!-- Rank Information -->
+                    <div class="mb-4">
+                        <h2 class="text-md font-semibold text-blue-600 mb-2">Current Rank</h2>
+                        
+                        <!-- If student has a rank -->
+                        <div th:if="${student.rank != null}" class="flex items-center mb-2">
+                            <div class="w-8 h-8 rounded-md mr-2" th:style="'background-color: ' + ${student.rank.beltColor} + ';'"></div>
+                            <span class="font-medium" th:text="${student.rank.name}"></span>
+                            
+                            <!-- Display stripes if any -->
+                            <div th:if="${student.currentStripes > 0}" class="flex ml-2">
+                                <div th:each="i : ${#numbers.sequence(1, student.currentStripes)}" 
+                                     class="w-1.5 h-6 bg-white border border-gray-300 mx-0.5"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- If no rank assigned -->
+                        <p th:if="${student.rank == null}" class="text-gray-500 italic">No rank assigned</p>
+                        
+                        <!-- Last promotion date -->
+                        <p th:if="${student.lastPromotionDate != null}" class="text-sm text-gray-600">
+                            Promoted: <span th:text="${#dates.format(student.lastPromotionDate, 'MMM dd, yyyy')}"></span>
+                        </p>
+                        
+                        <!-- Edit Rank Button -->
+                        <button type="button" 
+                                class="mt-2 w-full bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition duration-300"
+                                onclick="document.getElementById('rankModal').classList.remove('hidden')">
+                            Update Rank
+                        </button>
+                    </div>
+                    
                     <h1>Program</h1>
                 </div>
                 <!-- Membership Financials -->
@@ -324,6 +356,64 @@
 
         <!-- Modal Container for HTMX to swap content into -->
         <div id="modalContainer"></div>
+        
+        <!-- Rank Update Modal -->
+        <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden" id="rankModal"
+             onclick="if(event.target === this) { this.classList.add('hidden'); }">
+            <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                <div class="mt-3">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Update Student Rank</h3>
+                    
+                    <form th:action="@{/students/{id}/promote(id=${student.id})}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        
+                        <div class="mb-4">
+                            <label for="rankId" class="block text-sm font-medium text-gray-700 mb-1">Belt Rank</label>
+                            <select id="rankId" name="rankId" required 
+                                    class="w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2"
+                                    onchange="updateStripePreview()">
+                                <option value="">Select a rank</option>
+                                <option th:each="rank : ${ranks}" 
+                                        th:value="${rank.id}" 
+                                        th:selected="${student.rank != null && student.rank.id == rank.id}"
+                                        th:text="${rank.name}"
+                                        th:attr="data-max-stripes=${rank.maxStripes},
+                                                data-color=${rank.beltColor}">
+                                </option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="stripes" class="block text-sm font-medium text-gray-700 mb-1">Stripes</label>
+                            <div class="flex items-center">
+                                <input type="number" id="stripes" name="stripes" min="0" max="10" 
+                                       th:value="${student.currentStripes != null ? student.currentStripes : 0}"
+                                       class="w-20 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2"
+                                       oninput="updateStripePreview()" />
+                                <div class="ml-4 flex-grow">
+                                    <div id="stripePreview" class="flex">
+                                        <!-- Stripe preview will be generated by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between mt-6">
+                            <button type="button" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg shadow hover:bg-gray-300 transition duration-300"
+                                    onclick="document.getElementById('rankModal').classList.add('hidden')">
+                                Cancel
+                            </button>
+                            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700 transition duration-300">
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Minimal JavaScript required for modal functionality -->
+        <script src="/js/rank-management.js"></script>
     </body>
 
 </html>

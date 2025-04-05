@@ -36,7 +36,9 @@ public class RankServiceImpl implements RankService {
         Rank existingRank = rankRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Rank not found with id: " + id));
         existingRank.setName(rank.getName());
-        existingRank.setSubRanks(rank.getSubRanks());
+        existingRank.setBeltColor(rank.getBeltColor());
+        existingRank.setMaxStripes(rank.getMaxStripes());
+        existingRank.setDisplayOrder(rank.getDisplayOrder());
         return rankRepository.save(existingRank);
     }
 

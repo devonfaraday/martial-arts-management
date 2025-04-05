@@ -37,6 +37,10 @@ public class Student {
     @JoinColumn(name = "rank_id")
     private Rank rank;
     
+    private Integer currentStripes = 0;
+    
+    private Timestamp lastPromotionDate;
+    
     @ManyToOne
     @JoinColumn(name = "school_id")
     private School school;
@@ -128,6 +132,22 @@ public class Student {
 
     public void setRank(Rank rank) {
         this.rank = rank;
+    }
+    
+    public Integer getCurrentStripes() {
+        return currentStripes;
+    }
+    
+    public void setCurrentStripes(Integer currentStripes) {
+        this.currentStripes = currentStripes;
+    }
+    
+    public Timestamp getLastPromotionDate() {
+        return lastPromotionDate;
+    }
+    
+    public void setLastPromotionDate(Timestamp lastPromotionDate) {
+        this.lastPromotionDate = lastPromotionDate;
     }
     
     public School getSchool() {
