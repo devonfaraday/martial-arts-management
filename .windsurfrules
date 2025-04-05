@@ -1,0 +1,7 @@
+Never use Javascript in the HTML files.  Always create a .js file if javascript is needed.
+User Java for serverside rendering
+Use Thymeleaf for serverside rendering
+Use Tailwind for styling
+Use HTMX for client side rendering
+Use Maven for dependency management
+Use Git for version control

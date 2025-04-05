@@ -8,16 +8,19 @@ public class Rank {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
     private String name;
-
-    @ElementCollection
-    private List<String> subRanks;
+    
+    private String beltColor;
+    
+    private Integer maxStripes;
+    
+    private Integer displayOrder;
 
     @OneToMany(mappedBy = "rank")
     private List<Student> students;
 
     // Getters and setters
-
     public Long getId() {
         return id;
     }
@@ -34,12 +37,28 @@ public class Rank {
         this.name = name;
     }
 
-    public List<String> getSubRanks() {
-        return subRanks;
+    public String getBeltColor() {
+        return beltColor;
     }
 
-    public void setSubRanks(List<String> subRanks) {
-        this.subRanks = subRanks;
+    public void setBeltColor(String beltColor) {
+        this.beltColor = beltColor;
+    }
+
+    public Integer getMaxStripes() {
+        return maxStripes;
+    }
+
+    public void setMaxStripes(Integer maxStripes) {
+        this.maxStripes = maxStripes;
+    }
+
+    public Integer getDisplayOrder() {
+        return displayOrder;
+    }
+
+    public void setDisplayOrder(Integer displayOrder) {
+        this.displayOrder = displayOrder;
     }
 
     public List<Student> getStudents() {

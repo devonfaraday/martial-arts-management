@@ -34,8 +34,42 @@
                     </div>
                     <h5 class="text-lg font-semibold text-gray-800 mb-4"
                         th:text="${student.firstName} + ' ' + ${student.lastName}"></h5>
-                    <h1>Rank with last promotion date</h1>
-                    <h1>Program</h1>
+                    
+                    <!-- Rank Information -->
+                    <div class="mb-4">
+                        <h2 class="text-md font-semibold text-blue-600 mb-2">Current Rank</h2>
+                        
+                        <!-- If student has a rank -->
+                        <div th:if="${student.rank != null}" class="flex items-center mb-2">
+                            <div class="w-8 h-8 rounded-md mr-2" th:style="'background-color: ' + ${student.rank.beltColor} + ';'"></div>
+                            <span class="font-medium" th:text="${student.rank.name}"></span>
+                            
+                            <!-- Display stripes if any -->
+                            <div th:if="${student.currentStripes > 0}" class="flex ml-2">
+                                <th:block th:each="i : ${#numbers.sequence(1, student.currentStripes)}">
+                                    <div th:class="${'w-1.5 h-6 border border-gray-300 mx-0.5 ' + 
+                                              (i > 8 ? 'bg-black' : 
+                                               (i > 4 ? 'bg-red-600' : 'bg-white'))}">
+                                    </div>
+                                </th:block>
+                            </div>
+                        </div>
+                        
+                        <!-- If no rank assigned -->
+                        <p th:if="${student.rank == null}" class="text-gray-500 italic">No rank assigned</p>
+                        
+                        <!-- Last promotion date -->
+                        <p th:if="${student.lastPromotionDate != null}" class="text-sm text-gray-600">
+                            Promoted: <span th:text="${#dates.format(student.lastPromotionDate, 'MMM dd, yyyy')}"></span>
+                        </p>
+                        
+                        <!-- Edit Rank Button -->
+                        <button type="button" 
+                                class="mt-2 w-full bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition duration-300"
+                                onclick="document.getElementById('rankModal').classList.remove('hidden')">
+                            Update Rank
+                        </button>
+                    </div>
                 </div>
                 <!-- Membership Financials -->
                 <div class="w-80 bg-white shadow-lg rounded-lg p-6 h-fit mt-6">
@@ -165,35 +199,60 @@
                     <!-- Emergency Contacts Section -->
                     <section>
                         <h2 class="text-lg font-semibold text-blue-600 mb-4">Emergency Contacts</h2>
-                        <div th:each="contact, iterStat : ${student.emergencyContacts}" class="mb-6">
-                            <h3 class="text-md font-medium text-gray-700 mb-4">Contact <span th:text="${iterStat.index + 1}">1</span>:</h3>
-                            <div class="grid grid-cols-2 gap-6">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Name</label>
-                                    <input type="text" th:field="*{emergencyContacts[__${iterStat.index}__].name}"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2"
-                                        required />
+                        <div class="mb-4">
+                            <a th:href="@{/emergency-contacts/add?studentId={id}(id=${student.id})}" class="bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition duration-300 inline-flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                </svg>
+                                Add Emergency Contact
+                            </a>
+                        </div>
+                        
+                        <!-- Emergency Contacts List -->
+                        <div th:if="${emergencyContacts != null and !emergencyContacts.empty}" class="space-y-4">
+                            <div th:each="contact : ${emergencyContacts}" class="border rounded-lg p-4 bg-gray-50">
+                                <div class="flex justify-between items-center mb-2">
+                                    <h3 class="text-md font-medium text-gray-800" th:text="${contact.name}">Contact Name</h3>
+                                    <div class="flex space-x-2">
+                                        <a th:href="@{/emergency-contacts/edit/{id}(id=${contact.id})}" class="text-blue-600 hover:text-blue-800">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                            </svg>
+                                        </a>
+                                        <button type="button" class="text-red-600 hover:text-red-800"
+                                            th:hx-get="@{/emergency-contacts/{id}/confirm-delete(id=${contact.id})}"
+                                            hx-target="#modalContainer"
+                                            hx-swap="innerHTML"
+                                            th:hx-headers="${_csrf != null ? '{'''+_csrf.headerName+''': '''+_csrf.token+'''}' : '{}'}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                    </div>
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Relationship</label>
-                                    <input type="text"
-                                        th:field="*{emergencyContacts[__${iterStat.index}__].relationship}"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2"
-                                        required />
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Phone Number</label>
-                                    <input type="tel"
-                                        th:field="*{emergencyContacts[__${iterStat.index}__].phoneNumber}"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2"
-                                        required />
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700">Email</label>
-                                    <input type="email" th:field="*{emergencyContacts[__${iterStat.index}__].email}"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" />
+                                <div class="grid grid-cols-2 gap-4 text-sm">
+                                    <div>
+                                        <span class="text-gray-600">Relationship:</span>
+                                        <span class="ml-2 text-gray-800" th:text="${contact.relationship}">Relationship</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-600">Phone:</span>
+                                        <span class="ml-2 text-gray-800" th:text="${contact.phoneNumber}">Phone Number</span>
+                                    </div>
+                                    <div class="col-span-2">
+                                        <span class="text-gray-600">Email:</span>
+                                        <span class="ml-2 text-gray-800" th:text="${contact.email}">Email</span>
+                                    </div>
                                 </div>
                             </div>
+                        </div>
+                        
+                        <!-- No Emergency Contacts Message -->
+                        <div th:if="${emergencyContacts == null or emergencyContacts.empty}" class="text-center py-8 bg-gray-50 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            <p class="text-gray-600">No emergency contacts added yet.</p>
                         </div>
                     </section>
                 </form>
@@ -306,6 +365,64 @@
 
         <!-- Modal Container for HTMX to swap content into -->
         <div id="modalContainer"></div>
+        
+        <!-- Rank Update Modal -->
+        <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden" id="rankModal"
+             onclick="if(event.target === this) { this.classList.add('hidden'); }">
+            <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                <div class="mt-3">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Update Student Rank</h3>
+                    
+                    <form th:action="@{/students/{id}/promote(id=${student.id})}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        
+                        <div class="mb-4">
+                            <label for="rankId" class="block text-sm font-medium text-gray-700 mb-1">Belt Rank</label>
+                            <select id="rankId" name="rankId" required 
+                                    class="w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2"
+                                    onchange="updateStripePreview()">
+                                <option value="">Select a rank</option>
+                                <option th:each="rank : ${ranks}" 
+                                        th:value="${rank.id}" 
+                                        th:selected="${student.rank != null && student.rank.id == rank.id}"
+                                        th:text="${rank.name}"
+                                        th:attr="data-max-stripes=${rank.maxStripes},
+                                                data-color=${rank.beltColor}">
+                                </option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="stripes" class="block text-sm font-medium text-gray-700 mb-1">Stripes</label>
+                            <div class="flex items-center">
+                                <input type="number" id="stripes" name="stripes" min="0" max="10" 
+                                       th:value="${student.currentStripes != null ? student.currentStripes : 0}"
+                                       class="w-20 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2"
+                                       oninput="updateStripePreview()" />
+                                <div class="ml-4 flex-grow">
+                                    <div id="stripePreview" class="flex">
+                                        <!-- Stripe preview will be generated by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between mt-6">
+                            <button type="button" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg shadow hover:bg-gray-300 transition duration-300"
+                                    onclick="document.getElementById('rankModal').classList.add('hidden')">
+                                Cancel
+                            </button>
+                            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg shadow hover:bg-blue-700 transition duration-300">
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Minimal JavaScript required for modal functionality -->
+        <script src="/js/rank-management.js"></script>
     </body>
 
 </html>

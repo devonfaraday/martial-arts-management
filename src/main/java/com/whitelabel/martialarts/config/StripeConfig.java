@@ -9,7 +9,6 @@ import org.springframework.context.annotation.PropertySource;
 import jakarta.annotation.PostConstruct;
 
 @Configuration
-@PropertySource(value = "classpath:application-stripe.properties", ignoreResourceNotFound = true)
 public class StripeConfig {
 
     @Value("${stripe.api.secret-key:sk_test_placeholder}")
@@ -38,9 +37,12 @@ public class StripeConfig {
 
     @PostConstruct
     public void init() {
-        Stripe.apiKey = stripeSecretKey;
-        // Remove the API version setting as it might be causing compatibility issues
-        // Stripe.apiVersion = "2020-08-27"; 
+        // Only initialize Stripe if we have a real API key (not the placeholder)
+        if (stripeSecretKey != null && !stripeSecretKey.equals("sk_test_placeholder")) {
+            Stripe.apiKey = stripeSecretKey;
+            // Remove the API version setting as it might be causing compatibility issues
+            // Stripe.apiVersion = "2020-08-27";
+        }
     }
     
     public String getPublishableKey() {
