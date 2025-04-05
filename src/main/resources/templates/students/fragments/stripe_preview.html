@@ -3,10 +3,13 @@
 <body>
     <!-- Stripe Preview Fragment -->
     <div th:fragment="stripePreview" class="flex">
-        <!-- Show stripes based on the current number and max allowed for the rank -->
-        <div th:each="i : ${#numbers.sequence(1, currentStripes != null ? currentStripes : 0)}" 
-             class="w-1.5 h-6 bg-white border border-gray-300 mx-0.5">
-        </div>
+        <!-- Show stripes based on the current number and max allowed for the rank with different colors -->
+        <th:block th:each="i : ${#numbers.sequence(1, currentStripes != null ? currentStripes : 0)}">
+            <div th:class="${'w-1.5 h-6 border border-gray-300 mx-0.5 ' + 
+                          (i > 8 ? 'bg-black' : 
+                           (i > 4 ? 'bg-red-600' : 'bg-white'))}">
+            </div>
+        </th:block>
     </div>
 </body>
 </html>

@@ -49,9 +49,10 @@
                     
                     <div>
                         <label for="maxStripes" class="block text-sm font-medium text-gray-700">Maximum Stripes</label>
-                        <input type="number" id="maxStripes" th:field="*{maxStripes}" min="0" max="10"
+                        <input type="number" id="maxStripes" th:field="*{maxStripes}" min="0" max="12"
                             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2" />
-                        <p class="mt-1 text-sm text-gray-500">Number of stripes this rank can have (0-10)</p>
+                        <p class="mt-1 text-sm text-gray-500">Number of stripes this rank can have (0-12)</p>
+                        <p class="text-xs text-gray-500">Note: Stripes 5-8 will be red and 9-12 will be black</p>
                     </div>
                     
                     <div>

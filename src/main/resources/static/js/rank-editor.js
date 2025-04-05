@@ -61,10 +61,21 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const maxStripes = parseInt(maxStripesInput.value) || 0;
         
-        // Create stripe preview
+        // Create stripe preview with different colors based on position
         for (let i = 0; i < maxStripes; i++) {
             const stripe = document.createElement('div');
-            stripe.className = 'w-1.5 h-6 bg-white border border-gray-300 mx-0.5';
+            
+            // Determine stripe color based on position
+            let stripeColor = 'bg-white';
+            if (i >= 8) {
+                // Stripes 9-12 are black
+                stripeColor = 'bg-black';
+            } else if (i >= 4) {
+                // Stripes 5-8 are red
+                stripeColor = 'bg-red-600';
+            }
+            
+            stripe.className = `w-1.5 h-6 ${stripeColor} border border-gray-300 mx-0.5`;
             stripePreview.appendChild(stripe);
         }
         

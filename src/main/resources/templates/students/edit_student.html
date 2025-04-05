@@ -46,8 +46,12 @@
                             
                             <!-- Display stripes if any -->
                             <div th:if="${student.currentStripes > 0}" class="flex ml-2">
-                                <div th:each="i : ${#numbers.sequence(1, student.currentStripes)}" 
-                                     class="w-1.5 h-6 bg-white border border-gray-300 mx-0.5"></div>
+                                <th:block th:each="i : ${#numbers.sequence(1, student.currentStripes)}">
+                                    <div th:class="${'w-1.5 h-6 border border-gray-300 mx-0.5 ' + 
+                                              (i > 8 ? 'bg-black' : 
+                                               (i > 4 ? 'bg-red-600' : 'bg-white'))}">
+                                    </div>
+                                </th:block>
                             </div>
                         </div>
                         
