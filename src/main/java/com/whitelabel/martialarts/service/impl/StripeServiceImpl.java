@@ -142,13 +142,32 @@ public class StripeServiceImpl implements StripeService {
 
     @Override
     public Session retrieveSession(String sessionId) throws StripeException {
-        // Simple implementation - assumes we're retrieving from the platform account
+        // First try to retrieve from the platform account
         try {
             return Session.retrieve(sessionId);
         } catch (StripeException e) {
-            // If we can't find the session on the platform account, it might be on a connected account
-            // We would need to know which connected account to check
-            // For now, just rethrow the exception
+            // If we can't find the session on the platform account, try to find it in all schools' connected accounts
+            logger.info("Session not found on platform account, trying connected accounts");
+            
+            List<School> schools = schoolRepository.findAll();
+            for (School school : schools) {
+                String connectedAccountId = school.getStripeConnectAccountId();
+                if (connectedAccountId != null && !connectedAccountId.isEmpty()) {
+                    try {
+                        logger.info("Trying to retrieve session from connected account: {}", connectedAccountId);
+                        RequestOptions requestOptions = RequestOptions.builder()
+                                .setStripeAccount(connectedAccountId)
+                                .build();
+                        return Session.retrieve(sessionId, requestOptions);
+                    } catch (StripeException se) {
+                        // Continue to the next school if this one doesn't have the session
+                        logger.debug("Session not found on connected account: {}", connectedAccountId);
+                    }
+                }
+            }
+            
+            // If we've tried all connected accounts and still can't find it, rethrow the original exception
+            logger.error("Session not found on any account: {}", sessionId);
             throw e;
         }
     }
